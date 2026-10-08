@@ -16,9 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dept = trim($_POST['department'] ?? '');
     $year = trim($_POST['year'] ?? '');
 
-    if ($name === '' || $email === '' || $roll === '') {
-        setFlash('error', 'Name, email and roll number are required.');
-    } else {
+        // Auto-complete @gmail.com if username entered without @
+        if ($email !== '' && !str_contains($email, '@')) {
+            $email .= '@gmail.com';
+        }
+
+        if ($name === '' || $email === '' || $roll === '') {
+            setFlash('error', 'Name, email and roll number are required.');
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^[a-z0-9._%+-]+@gmail\.com$/i', $email)) {
+            setFlash('error', 'Invalid email ID: Email must be a valid @gmail.com address.');
+        } else {
         try {
             $hash = password_hash('Password@123', PASSWORD_DEFAULT);
             $pdo->beginTransaction();

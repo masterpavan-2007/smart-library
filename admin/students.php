@@ -24,8 +24,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address = trim($_POST['address'] ?? '');
         $status = $_POST['status'] ?? 'active';
 
+        // Auto-complete @gmail.com if username entered without @
+        if ($email !== '' && !str_contains($email, '@')) {
+            $email .= '@gmail.com';
+        }
+
         if ($name === '' || $email === '' || $roll === '') {
             setFlash('error', 'Name, email and roll number are required.');
+            redirect('students.php');
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^[a-z0-9._%+-]+@gmail\.com$/i', $email)) {
+            setFlash('error', 'Invalid email ID: Email must be a valid @gmail.com address.');
+            redirect('students.php');
+        } elseif ($phone !== '' && !preg_match('/^[0-9]+$/', $phone)) {
+            setFlash('error', 'Invalid number: Characters or symbols are not allowed. Only numbers (0-9) are permitted.');
+            redirect('students.php');
+        } elseif ($phone !== '' && strlen($phone) > 10) {
+            setFlash('error', 'Invalid number: More than 10 numbers entered (' . strlen($phone) . ' digits). Mobile number must be exactly 10 integers.');
+            redirect('students.php');
+        } elseif ($phone !== '' && strlen($phone) < 10) {
+            setFlash('error', 'Invalid number: Mobile number must be exactly 10 integers (currently ' . strlen($phone) . ' digits).');
             redirect('students.php');
         }
 
@@ -152,7 +169,7 @@ include __DIR__ . '/../includes/header.php';
             </div>
             <div class="form-row">
                 <div class="form-group"><label>Roll Number *</label><input class="form-control" name="roll_number" required value="<?= e($editRow['roll_number'] ?? '') ?>"></div>
-                <div class="form-group"><label>Mobile Number</label><input class="form-control" name="phone" value="<?= e($editRow['phone'] ?? '') ?>"></div>
+                <div class="form-group"><label>Mobile Number (10 digits)</label><input class="form-control" type="tel" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" inputmode="numeric" placeholder="e.g. 9876543210" value="<?= e($editRow['phone'] ?? '') ?>"></div>
             </div>
             <div class="form-row">
                 <div class="form-group"><label>Course</label><input class="form-control" name="course" value="<?= e($editRow['course'] ?? '') ?>"></div>

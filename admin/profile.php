@@ -36,6 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setFlash('error', 'Name and Email are required.');
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             setFlash('error', 'Please enter a valid email address.');
+        } elseif ($phone !== '' && !preg_match('/^[0-9]+$/', $phone)) {
+            setFlash('error', 'Invalid number: Characters or symbols are not allowed. Only numbers (0-9) are permitted.');
+        } elseif ($phone !== '' && strlen($phone) > 10) {
+            setFlash('error', 'Invalid number: More than 10 numbers entered (' . strlen($phone) . ' digits). Mobile number must be exactly 10 integers.');
+        } elseif ($phone !== '' && strlen($phone) < 10) {
+            setFlash('error', 'Invalid number: Mobile number must be exactly 10 integers (currently ' . strlen($phone) . ' digits).');
         } else {
             // Check email uniqueness among other users
             $chk = $pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ? LIMIT 1");

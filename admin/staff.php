@@ -22,6 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($name === '' || $email === '') {
             setFlash('error', 'Name and email are required.');
             redirect('staff.php');
+        } elseif ($phone !== '' && !preg_match('/^[0-9]+$/', $phone)) {
+            setFlash('error', 'Invalid number: Characters or symbols are not allowed. Only numbers (0-9) are permitted.');
+            redirect('staff.php');
+        } elseif ($phone !== '' && strlen($phone) > 10) {
+            setFlash('error', 'Invalid number: More than 10 numbers entered (' . strlen($phone) . ' digits). Mobile number must be exactly 10 integers.');
+            redirect('staff.php');
+        } elseif ($phone !== '' && strlen($phone) < 10) {
+            setFlash('error', 'Invalid number: Mobile number must be exactly 10 integers (currently ' . strlen($phone) . ' digits).');
+            redirect('staff.php');
         }
 
         try {
