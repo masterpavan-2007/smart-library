@@ -261,6 +261,7 @@ a:hover { text-decoration: underline; }
 
 /* ---------- Cards ---------- */
 .grid { display: grid; gap: 18px; }
+.grid-5 { grid-template-columns: repeat(5, 1fr); }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -394,7 +395,7 @@ table.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-  .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-5, .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
   .form-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
@@ -402,7 +403,7 @@ table.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .sidebar.open { transform: translateX(0); }
   .main { margin-left: 0; }
   .menu-toggle { display: block; }
-  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .grid-5, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
 }
 
 /* ---------- Print (used by report "Print Report" buttons) ---------- */

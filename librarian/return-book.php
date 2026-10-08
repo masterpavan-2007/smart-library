@@ -37,8 +37,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([$issueId, $today, $lateDays, $fine, $_SESSION['user_id'], $remarks]);
 
         if ($fine > 0) {
-            $pdo->prepare("INSERT INTO fines (student_id, issue_id, amount, reason, status) VALUES (?,?,?,?, 'pending')")
-                ->execute([$issue['student_pk'], $issueId, $fine, "Late return - $lateDays day(s)"]);
+            $chk = $pdo->prepare("SELECT id, status, paid_amount FROM fines WHERE issue_id = ?");
+            $chk->execute([$issueId]);
+            $existing = $chk->fetch();
+
+            $fineRate = (float)($settings['fine_per_day'] ?? 5.00);
+            $reason = "Late return - $lateDays day(s)";
+
+            if ($existing) {
+                if (!in_array($existing['status'], ['paid', 'waived'], true)) {
+                    $paid = (float)$existing['paid_amount'];
+                    $out = max(0.00, $fine - $paid);
+                    $newStatus = ($out <= 0.00) ? 'paid' : ($paid > 0 ? 'partially_paid' : 'unpaid');
+                    $pdo->prepare("
+                        UPDATE fines 
+                        SET book_id = ?, due_date = ?, return_date = ?, late_days = ?, fine_rate = ?,
+                            fine_amount = ?, outstanding_amount = ?, amount = ?, reason = ?, status = ?
+                        WHERE id = ?
+                    ")->execute([
+                        $issue['book_id'], $issue['due_date'], $today, $lateDays, $fineRate,
+                        $fine, $out, $fine, $reason, $newStatus, $existing['id']
+                    ]);
+                }
+            } else {
+                $pdo->prepare("
+                    INSERT INTO fines 
+                    (student_id, book_id, issue_id, due_date, return_date, late_days, fine_rate, fine_amount, paid_amount, outstanding_amount, amount, reason, status) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0.00, ?, ?, ?, 'unpaid')
+                ")->execute([
+                    $issue['student_pk'], $issue['book_id'], $issueId, $issue['due_date'], $today,
+                    $lateDays, $fineRate, $fine, $fine, $fine, $reason
+                ]);
+            }
         }
         $pdo->commit();
 

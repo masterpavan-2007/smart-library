@@ -17,8 +17,18 @@ $availableCopies     = (int)$pdo->query("SELECT COALESCE(SUM(available_copies),0
 $issuedBooks         = (int)$pdo->query("SELECT COUNT(*) FROM book_issues WHERE status IN ('issued','overdue')")->fetchColumn();
 $overdueBooks        = (int)$pdo->query("SELECT COUNT(*) FROM book_issues WHERE status='issued' AND due_date < CURDATE()")->fetchColumn();
 $totalStudents       = (int)$pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();
-$pendingFines        = (float)$pdo->query("SELECT COALESCE(SUM(amount),0) FROM fines WHERE status='pending'")->fetchColumn();
 $totalReservations   = (int)$pdo->query("SELECT COUNT(*) FROM reservations WHERE status IN ('pending','approved','ready')")->fetchColumn();
+
+// ---- Fine & Revenue Statistics (Section 11) ----
+syncStudentFines($pdo);
+$totalFineOutstanding = (float)$pdo->query("
+    SELECT COALESCE(SUM(CASE WHEN outstanding_amount > 0 THEN outstanding_amount ELSE (fine_amount - paid_amount) END), 0)
+    FROM fines WHERE status IN ('unpaid', 'pending', 'partially_paid')
+")->fetchColumn();
+$totalFineCollected   = (float)$pdo->query("SELECT COALESCE(SUM(amount), 0) FROM payments")->fetchColumn();
+$pendingPaymentsCount = (int)$pdo->query("SELECT COUNT(*) FROM fines WHERE status IN ('unpaid', 'pending', 'partially_paid')")->fetchColumn();
+$paidFinesCount       = (int)$pdo->query("SELECT COUNT(*) FROM fines WHERE status = 'paid'")->fetchColumn();
+$studentsWithFineCount= (int)$pdo->query("SELECT COUNT(DISTINCT student_id) FROM fines WHERE status IN ('unpaid', 'pending', 'partially_paid')")->fetchColumn();
 
 // ---- Virtual Library Stat cards ----
 $totalDigitalBooks    = (int)$pdo->query("SELECT COUNT(*) FROM digital_books")->fetchColumn();
@@ -153,6 +163,53 @@ include __DIR__ . '/../includes/header.php';
         <div class="card stat-card">
             <div class="icon blue"><i class="fa-solid fa-users"></i></div>
             <div><div class="num"><?= $activeReaders ?></div><div class="label">Active Online Readers</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Fine & Financial Revenue Dashboard (Section 11) -->
+<div style="margin-top:18px; margin-bottom:8px;">
+    <div class="flex justify-between items-center" style="margin-bottom:10px;">
+        <h3 style="font-size:16px; margin:0; color:var(--text); display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-coins text-warning"></i> Fine Management & Financial Overview
+        </h3>
+        <a href="fines.php" style="font-size:13px; font-weight:600;">Manage Fines &rarr;</a>
+    </div>
+    <div class="grid grid-5">
+        <div class="card stat-card">
+            <div class="icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div>
+                <div class="num" style="color:#dc2626;">&#8377;<?= number_format($totalFineOutstanding, 2) ?></div>
+                <div class="label">Total Outstanding</div>
+            </div>
+        </div>
+        <div class="card stat-card">
+            <div class="icon green"><i class="fa-solid fa-sack-dollar"></i></div>
+            <div>
+                <div class="num">&#8377;<?= number_format($totalFineCollected, 2) ?></div>
+                <div class="label">Total Collected</div>
+            </div>
+        </div>
+        <div class="card stat-card">
+            <div class="icon yellow"><i class="fa-solid fa-clock"></i></div>
+            <div>
+                <div class="num"><?= $pendingPaymentsCount ?></div>
+                <div class="label">Pending Payments</div>
+            </div>
+        </div>
+        <div class="card stat-card">
+            <div class="icon blue"><i class="fa-solid fa-circle-check"></i></div>
+            <div>
+                <div class="num"><?= $paidFinesCount ?></div>
+                <div class="label">Paid Fines</div>
+            </div>
+        </div>
+        <div class="card stat-card">
+            <div class="icon red"><i class="fa-solid fa-user-xmark"></i></div>
+            <div>
+                <div class="num"><?= $studentsWithFineCount ?></div>
+                <div class="label">Students with Fine</div>
+            </div>
         </div>
     </div>
 </div>

@@ -21,8 +21,33 @@ $stmt->execute([$studentId]); $activeBooks = (int)$stmt->fetchColumn();
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM book_issues WHERE student_id=?");
 $stmt->execute([$studentId]); $totalBorrowed = (int)$stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COALESCE(SUM(amount),0) FROM fines WHERE student_id=? AND status='pending'");
-$stmt->execute([$studentId]); $pendingFines = (float)$stmt->fetchColumn();
+$pendingFines = getStudentOutstandingFine($pdo, $studentId);
+
+// Fetch outstanding fines for immediate display & action
+$stmtFines = $pdo->prepare("
+    SELECT f.*, b.title as book_title, b.isbn,
+           COALESCE(f.due_date, bi.due_date) as due_date_val,
+           COALESCE(f.return_date, bi.return_date) as return_date_val
+    FROM fines f
+    LEFT JOIN books b ON b.id = f.book_id
+    LEFT JOIN book_issues bi ON bi.id = f.issue_id
+    WHERE f.student_id = ? AND f.status IN ('unpaid','pending','partially_paid')
+    ORDER BY f.id DESC
+");
+$stmtFines->execute([$studentId]);
+$myUnpaidFines = $stmtFines->fetchAll();
+
+// Fetch recent fine ledger
+$stmtRecentFines = $pdo->prepare("
+    SELECT f.*, b.title as book_title, p.payment_id, p.payment_date, p.id as payment_record_id
+    FROM fines f
+    LEFT JOIN books b ON b.id = f.book_id
+    LEFT JOIN payments p ON p.fine_id = f.id
+    WHERE f.student_id = ?
+    ORDER BY f.id DESC LIMIT 4
+");
+$stmtRecentFines->execute([$studentId]);
+$recentFines = $stmtRecentFines->fetchAll();
 
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM reservations WHERE student_id=? AND status IN ('pending','approved','ready')");
 $stmt->execute([$studentId]); $activeReservations = (int)$stmt->fetchColumn();
@@ -89,6 +114,46 @@ $myIssued = $myIssued->fetchAll();
 
 include __DIR__ . '/../includes/header.php';
 ?>
+
+<!-- ================== OUTSTANDING FINE & INSTANT PAY BANNER ================== -->
+<?php if ($pendingFines > 0 || !empty($myUnpaidFines)): ?>
+    <div class="card" style="margin-bottom:20px; border:2px solid #ef4444; border-radius:14px; background:linear-gradient(135deg, #fffbfb 0%, #ffffff 100%); box-shadow:0 6px 20px rgba(239,68,68,0.12); padding:20px 24px;">
+        <div class="flex items-center justify-between" style="flex-wrap:wrap; gap:16px;">
+            <div style="flex:1; min-width:280px;">
+                <div class="flex items-center gap-2" style="margin-bottom:8px;">
+                    <span class="badge badge-red" style="font-size:12px; padding:4px 10px;"><i class="fa-solid fa-triangle-exclamation"></i> Action Required</span>
+                    <span class="text-muted" style="font-size:13px;">Late Return Overdue Charges</span>
+                </div>
+                <h3 style="margin:0 0 8px 0; font-size:20px; color:#991b1b; display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-receipt text-danger"></i> Outstanding Library Fine
+                </h3>
+                <div style="display:flex; flex-wrap:wrap; gap:16px; font-size:14px; color:#374151;">
+                    <div>Student: <strong style="color:#111827;"><?= e($_SESSION['name'] ?? 'Student') ?></strong></div>
+                    <div>&bull; Student ID: <strong style="color:#111827;"><?= e($student['roll_number']) ?></strong></div>
+                    <?php if (!empty($myUnpaidFines)): ?>
+                        <div>&bull; Book: <strong style="color:#111827;"><?= e($myUnpaidFines[0]['book_title'] ?? 'Overdue Book') ?></strong></div>
+                        <div>&bull; Overdue Days: <span class="badge badge-red"><?= (int)$myUnpaidFines[0]['late_days'] ?> Days Late</span></div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+                <div class="text-muted" style="font-size:12px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;">Outstanding Fine</div>
+                <div style="font-size:34px; font-weight:800; color:#dc2626; line-height:1; letter-spacing:-0.02em;">
+                    &#8377;<?= number_format($pendingFines, 2) ?>
+                </div>
+                <div class="flex gap-2" style="margin-top:6px;">
+                    <a href="pay-fine.php?fine_id=<?= !empty($myUnpaidFines) ? $myUnpaidFines[0]['id'] : 'all' ?>" class="btn btn-primary" style="background:#dc2626; border-color:#dc2626; padding:10px 24px; font-weight:700; font-size:14px; box-shadow:0 3px 10px rgba(220,38,38,0.35); display:inline-flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-qrcode"></i> PAY NOW
+                    </a>
+                    <a href="fines.php" class="btn btn-outline" style="border-color:#d1d5db; background:#fff; color:#374151;">
+                        <i class="fa-solid fa-list-check"></i> My Fines
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <!-- ================== URGENT REMINDERS & ALERTS ================== -->
 <?php if (!empty($myAlerts['due_soon_6h'])): ?>
@@ -231,7 +296,13 @@ include __DIR__ . '/../includes/header.php';
     <div class="card stat-card"><div class="icon blue"><i class="fa-solid fa-book"></i></div><div><div class="num"><?= $activeBooks ?></div><div class="label">Physical Books with Me</div></div></div>
     <div class="card stat-card"><div class="icon green"><i class="fa-solid fa-book-open-reader"></i></div><div><div class="num"><?= $totalBorrowed ?></div><div class="label">Total Physical Borrowed</div></div></div>
     <div class="card stat-card"><div class="icon yellow"><i class="fa-solid fa-laptop-code"></i></div><div><div class="num"><?= $digitalReadCount ?></div><div class="label">Digital E-Books Read</div></div></div>
-    <div class="card stat-card"><div class="icon red"><i class="fa-solid fa-coins"></i></div><div><div class="num">&#8377;<?= number_format($pendingFines,2) ?></div><div class="label">Pending Fines</div></div></div>
+    <a href="fines.php" class="card stat-card" style="text-decoration:none; color:inherit;">
+        <div class="icon red"><i class="fa-solid fa-coins"></i></div>
+        <div>
+            <div class="num">&#8377;<?= number_format($pendingFines,2) ?></div>
+            <div class="label">Pending Fines <?= $pendingFines > 0 ? '<span style="color:#dc2626; font-weight:700;">&bull; Pay</span>' : '' ?></div>
+        </div>
+    </a>
 </div>
 
 <!-- Continue Reading Banner (If In Progress) -->
@@ -329,5 +400,50 @@ include __DIR__ . '/../includes/header.php';
     </div>
     <?php endif; ?>
 </div>
+
+<?php if (!empty($recentFines)): ?>
+<div class="card" style="margin-top:18px;">
+    <div class="flex justify-between items-center" style="margin-bottom:12px;">
+        <h3 style="margin:0;"><i class="fa-solid fa-coins text-warning"></i> My Recent Fines & Payment Activity</h3>
+        <a href="fines.php" style="font-size:12.5px; font-weight:600;">Manage All Fines & Payments &rarr;</a>
+    </div>
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Reason</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($recentFines as $rf): ?>
+                    <tr>
+                        <td><strong><?= e($rf['book_title'] ?? 'General Fine') ?></strong></td>
+                        <td><?= e($rf['reason']) ?></td>
+                        <td><strong>&#8377;<?= number_format($rf['amount'], 2) ?></strong></td>
+                        <td><?= statusBadge($rf['status']) ?></td>
+                        <td>
+                            <?php if (in_array($rf['status'], ['unpaid', 'pending', 'partially_paid'])): ?>
+                                <a href="pay-fine.php?fine_id=<?= $rf['id'] ?>" class="btn btn-sm btn-primary" style="background:#dc2626; border-color:#dc2626;">
+                                    <i class="fa-solid fa-qrcode"></i> Pay Now
+                                </a>
+                            <?php elseif ($rf['status'] === 'paid' && !empty($rf['payment_id'])): ?>
+                                <a href="../receipt.php?payment_id=<?= urlencode($rf['payment_id']) ?>" target="_blank" class="btn btn-sm btn-outline">
+                                    <i class="fa-solid fa-file-invoice"></i> Receipt
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted">&mdash;</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php endif; ?>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
