@@ -1,0 +1,276 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [ 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R ] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 683 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Calculus & Linear Algebra for Computer Scientists) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Mathematics) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 1 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Unit 1: Vectors & Matrix Operations) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Vector spaces, dot products, cross products, and geometric projections.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Matrix multiplication, determinants, and Gaussian elimination methods.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 670 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Calculus & Linear Algebra for Computer Scientists) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Mathematics) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 2 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Unit 2: Eigenvalues and Eigenvectors) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Characteristic polynomials and diagonalizing square matrices.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Principal Component Analysis \(PCA\) and dimensionality reduction.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 684 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Calculus & Linear Algebra for Computer Scientists) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Mathematics) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 3 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Unit 3: Differential Calculus in Multiple Dimensions) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Partial derivatives, directional derivatives, and gradient vectors.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Jacobian and Hessian matrices for multivariable functions.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 684 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Calculus & Linear Algebra for Computer Scientists) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Mathematics) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 4 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Unit 4: Optimization & Gradient Descent) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Convex functions, saddle points, and local vs global extrema.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Stochastic Gradient Descent \(SGD\) with momentum in neural network training.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 681 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Calculus & Linear Algebra for Computer Scientists) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Mathematics) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 5 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Unit 5: Integrals & Probability Densities) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Double and triple integrals for area and volume calculations.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Joint probability distributions, expectation, and variance formulations.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000143 00000 n 
+0000000213 00000 n 
+0000000339 00000 n 
+0000001073 00000 n 
+0000001199 00000 n 
+0000001920 00000 n 
+0000002046 00000 n 
+0000002781 00000 n 
+0000002909 00000 n 
+0000003645 00000 n 
+0000003773 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+4506
+%%EOF

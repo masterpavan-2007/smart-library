@@ -1,0 +1,276 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [ 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R ] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 674 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Introduction to Algorithms \(Interactive Edition\)) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 1 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Part I: Foundations of Algorithms) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Algorithm analysis: Big-O, Omega, and Theta notation definitions.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Divide-and-conquer recurrences solved using the Master Theorem.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 671 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Introduction to Algorithms \(Interactive Edition\)) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 2 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Part II: Sorting and Order Statistics) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Heapsort, Quicksort, and linear time sorting algorithms.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Lower bounds for comparison sorting: why O\(n log n\) is optimal.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 669 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Introduction to Algorithms \(Interactive Edition\)) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 3 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Part III: Advanced Data Structures) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Red-Black Trees, B-Trees, and Fibonacci Heaps.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Amortized analysis techniques: aggregate, accounting, and potential methods.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 682 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Introduction to Algorithms \(Interactive Edition\)) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 4 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Part IV: Graph Algorithms) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Breadth-First Search \(BFS\) and Depth-First Search \(DFS\) traversals.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Minimum Spanning Trees: Kruskal and Prim algorithms with priority queues.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 655 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Introduction to Algorithms \(Interactive Edition\)) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Thomas H. Cormen  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 5 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Part V: NP-Completeness) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Polynomial time reductions and proof techniques.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Classic NP-complete problems: SAT, Vertex-Cover, Traveling Salesperson.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000143 00000 n 
+0000000213 00000 n 
+0000000339 00000 n 
+0000001064 00000 n 
+0000001190 00000 n 
+0000001912 00000 n 
+0000002038 00000 n 
+0000002758 00000 n 
+0000002886 00000 n 
+0000003620 00000 n 
+0000003748 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+4455
+%%EOF

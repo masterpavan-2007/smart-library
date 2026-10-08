@@ -1,0 +1,276 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [ 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R ] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 670 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Cybersecurity Engineering & Threat Defense) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Technology) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 1 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Module 1: Threat Modeling & Zero Trust) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Never trust, always verify: the pillars of modern enterprise zero-trust.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(STRIDE threat modeling methodology applied to cloud services.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 676 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Cybersecurity Engineering & Threat Defense) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Technology) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 2 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Module 2: Applied Cryptography) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Symmetric \(AES-256-GCM\) vs Asymmetric \(RSA, ECC Curve25519\) encryption.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Digital signatures, PKI certificate authorities, and TLS 1.3 handshakes.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 694 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Cybersecurity Engineering & Threat Defense) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Technology) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 3 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Module 3: Web Application Security) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Preventing SQL Injection, Cross-Site Scripting \(XSS\), and CSRF vulnerabilities.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Content Security Policy \(CSP\), HTTP security headers, and secure cookie flags.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 675 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Cybersecurity Engineering & Threat Defense) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Technology) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 4 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Module 4: Network Defense & SIEM) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Intrusion Detection Systems \(Snort/Suricata\) and packet inspection.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Log aggregation, threat hunting, and automated incident response playbooks.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 679 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Cybersecurity Engineering & Threat Defense) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Technology) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 5 of 5) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Module 5: Security Architecture & Auditing) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Conducting thorough penetration testing with ethical boundaries.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Compliance frameworks: ISO 27001, SOC 2, and NIST Cybersecurity Framework.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000143 00000 n 
+0000000213 00000 n 
+0000000339 00000 n 
+0000001060 00000 n 
+0000001186 00000 n 
+0000001913 00000 n 
+0000002039 00000 n 
+0000002784 00000 n 
+0000002912 00000 n 
+0000003639 00000 n 
+0000003767 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+4498
+%%EOF

@@ -1,0 +1,327 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [ 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R ] /Count 6 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 638 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Clean Code: Digital Handbook) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 1 of 6) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Chapter 1: Meaningful Names) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Intention-revealing names save hours of code comprehension.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Use pronounceable, searchable names and avoid disinformation.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 630 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Clean Code: Digital Handbook) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 2 of 6) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Chapter 2: Functions) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Functions should be small and do exactly one thing well.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Function arguments should ideally be zero, one, or at most two.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 633 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Clean Code: Digital Handbook) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 3 of 6) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Chapter 3: Comments & Formatting) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Do not comment bad code - rewrite it.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Good formatting communicates structure and priority to fellow developers.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 640 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Clean Code: Digital Handbook) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 4 of 6) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Chapter 4: Error Handling) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Use exceptions rather than return codes for cleaner flow control.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Provide context with exceptions to make debugging seamless.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 642 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Clean Code: Digital Handbook) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 5 of 6) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Chapter 5: Unit Tests & TDD) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Test code is just as important as production code.) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Keep tests clean, fast, independent, repeatable, and timely \(F.I.R.S.T\).) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 15 0 R >>
+endobj
+15 0 obj
+<< /Length 655 >>
+stream
+BT
+/F1 16 Tf
+50 750 Td
+(Clean Code: Digital Handbook) Tj
+ET
+BT
+/F1 11 Tf
+50 725 Td
+(Author: Robert C. Martin  |  Category: Computer Science) Tj
+ET
+BT
+/F1 10 Tf
+50 705 Td
+(Page 6 of 6) Tj
+ET
+BT
+/F1 10 Tf
+50 685 Td
+(______________________________________________________________________) Tj
+ET
+BT
+/F1 12 Tf
+50 650 Td
+(Chapter 6: Summary & Best Practices) Tj
+ET
+BT
+/F1 12 Tf
+50 624 Td
+(Leave the code cleaner than you found it \(The Boy Scout Rule\).) Tj
+ET
+BT
+/F1 12 Tf
+50 598 Td
+(Continuous refactoring is the hallmark of software craftsmanship.) Tj
+ET
+BT
+/F1 9 Tf
+50 40 Td
+(Smart Library Management System - Official Virtual Library Digital Reader) Tj
+ET
+
+endstream
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000150 00000 n 
+0000000220 00000 n 
+0000000346 00000 n 
+0000001035 00000 n 
+0000001161 00000 n 
+0000001842 00000 n 
+0000001968 00000 n 
+0000002652 00000 n 
+0000002780 00000 n 
+0000003472 00000 n 
+0000003600 00000 n 
+0000004294 00000 n 
+0000004422 00000 n 
+trailer
+<< /Size 16 /Root 1 0 R >>
+startxref
+5129
+%%EOF
