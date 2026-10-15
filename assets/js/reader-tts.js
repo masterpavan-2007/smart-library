@@ -74,6 +74,7 @@ class EBookTTSReader {
        ------------------------------------------------------------- */
     initVoices() {
         const update = () => {
+            if (!window.speechSynthesis) return;
             const list = window.speechSynthesis.getVoices();
             if (list && list.length > 0) {
                 this.voices = list;
@@ -82,12 +83,16 @@ class EBookTTSReader {
         };
 
         update();
-        if ('onvoiceschanged' in window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = update;
+        if (typeof window.speechSynthesis !== 'undefined') {
+            if ('onvoiceschanged' in window.speechSynthesis) {
+                window.speechSynthesis.onvoiceschanged = update;
+            }
+            window.speechSynthesis.addEventListener('voiceschanged', update);
         }
-        // Fallback retry for Chromium browsers where onvoiceschanged may delay
+        // Fallback retries for Chromium browsers where onvoiceschanged may delay
+        setTimeout(update, 200);
         setTimeout(update, 600);
-        setTimeout(update, 1800);
+        setTimeout(update, 1500);
     }
 
     populateVoiceSelect() {
@@ -127,13 +132,22 @@ class EBookTTSReader {
     }
 
     getChosenVoice() {
+        if (!this.voices || this.voices.length === 0) {
+            if (typeof window.speechSynthesis !== 'undefined') {
+                const list = window.speechSynthesis.getVoices();
+                if (list && list.length > 0) {
+                    this.voices = list;
+                    this.populateVoiceSelect();
+                }
+            }
+        }
         if (!this.voices || this.voices.length === 0) return null;
         if (this.selectedVoiceURI) {
             const found = this.voices.find(v => v.voiceURI === this.selectedVoiceURI);
             if (found) return found;
         }
         // Fallback to first English or first available
-        return this.voices.find(v => v.lang.startsWith('en')) || this.voices[0] || null;
+        return this.voices.find(v => v.lang.toLowerCase().startsWith('en')) || this.voices[0] || null;
     }
 
     /* -------------------------------------------------------------
@@ -331,7 +345,10 @@ class EBookTTSReader {
        Speech Synthesis Engine
        ------------------------------------------------------------- */
     play() {
-        if (!this.isSupported) return;
+        if (!this.isSupported) {
+            alert('Speech synthesis is not supported by your browser.');
+            return;
+        }
 
         if (this.status === 'paused') {
             this.resume();
@@ -341,9 +358,15 @@ class EBookTTSReader {
         // If stopped and no sentences loaded yet, load them first
         if (this.sentences.length === 0) {
             this.loadCurrentPageText().then(() => {
+                this.currentIndex = 0;
                 this.speakCurrentSentence();
             });
             return;
+        }
+
+        // If at the end of sentences, wrap around to sentence 0
+        if (this.currentIndex >= this.sentences.length) {
+            this.currentIndex = 0;
         }
 
         this.speakCurrentSentence();
@@ -369,6 +392,9 @@ class EBookTTSReader {
         const voice = this.getChosenVoice();
         if (voice) {
             utterance.voice = voice;
+            utterance.lang = voice.lang || 'en-US';
+        } else {
+            utterance.lang = 'en-US';
         }
 
         utterance.onstart = () => {
@@ -393,7 +419,7 @@ class EBookTTSReader {
 
             this.currentIndex++;
             if (this.currentIndex < this.sentences.length) {
-                this.speakCurrentSentence();
+                this.speakNextSentenceUncanceled();
             } else {
                 this.handlePlaybackFinished();
             }
@@ -408,12 +434,89 @@ class EBookTTSReader {
                 // Step forward to avoid deadlock
                 this.currentIndex++;
                 if (this.currentIndex < this.sentences.length) {
-                    this.speakCurrentSentence();
+                    this.speakNextSentenceUncanceled();
                 } else {
                     this.handlePlaybackFinished();
                 }
             }
         };
+
+        if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+
+        window.speechSynthesis.speak(utterance);
+        this.status = 'playing';
+        this.updatePlayerUI();
+    }
+
+    speakNextSentenceUncanceled() {
+        if (!this.isSupported) return;
+        const token = ++this.speechToken;
+        if (this.currentIndex >= this.sentences.length) {
+            this.handlePlaybackFinished();
+            return;
+        }
+
+        const sentenceObj = this.sentences[this.currentIndex];
+        const textToSpeak = sentenceObj.text;
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.rate = this.speed;
+        utterance.pitch = 1.0;
+
+        const voice = this.getChosenVoice();
+        if (voice) {
+            utterance.voice = voice;
+            utterance.lang = voice.lang || 'en-US';
+        } else {
+            utterance.lang = 'en-US';
+        }
+
+        utterance.onstart = () => {
+            if (this.speechToken !== token) return;
+            this.status = 'playing';
+            this.updatePlayerUI();
+            this.startKeepAlive();
+            this.highlightActiveSentence(this.currentIndex);
+            this.savePosition();
+        };
+
+        utterance.onend = () => {
+            if (this.speechToken !== token) return;
+            this.stopKeepAlive();
+
+            const prevCard = document.getElementById(`ttsSentenceCard_${this.currentIndex}`);
+            if (prevCard) {
+                prevCard.classList.remove('active');
+                prevCard.classList.add('played');
+            }
+
+            this.currentIndex++;
+            if (this.currentIndex < this.sentences.length) {
+                this.speakNextSentenceUncanceled();
+            } else {
+                this.handlePlaybackFinished();
+            }
+        };
+
+        utterance.onerror = (e) => {
+            if (this.speechToken !== token) return;
+            this.stopKeepAlive();
+            if (e.error !== 'canceled' && e.error !== 'interrupted') {
+                console.warn('SpeechSynthesis error:', e.error);
+                this.currentIndex++;
+                if (this.currentIndex < this.sentences.length) {
+                    this.speakNextSentenceUncanceled();
+                } else {
+                    this.handlePlaybackFinished();
+                }
+            }
+        };
+
+        if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
 
         window.speechSynthesis.speak(utterance);
         this.status = 'playing';
@@ -452,9 +555,65 @@ class EBookTTSReader {
 
     stopSpeechEngineOnly() {
         this.stopKeepAlive();
-        if (window.speechSynthesis) {
+        if (window.speechSynthesis && (window.speechSynthesis.speaking || window.speechSynthesis.pending)) {
             window.speechSynthesis.cancel();
         }
+    }
+
+    testCurrentVoice() {
+        if (!this.isSupported) {
+            alert('Speech Synthesis is not supported in this browser.');
+            return;
+        }
+
+        this.stopSpeechEngineOnly();
+        this.status = 'stopped';
+        this.updatePlayerUI();
+
+        const voice = this.getChosenVoice();
+        const voiceName = voice ? voice.name : 'System Default';
+        const testText = `Hello! Text to speech is working properly with ${voiceName}.`;
+
+        const testUtt = new SpeechSynthesisUtterance(testText);
+        testUtt.rate = this.speed;
+        testUtt.pitch = 1.0;
+        if (voice) {
+            testUtt.voice = voice;
+            testUtt.lang = voice.lang || 'en-US';
+        } else {
+            testUtt.lang = 'en-US';
+        }
+
+        const btn = this.dockEl ? this.dockEl.querySelector('#ttsTestVoiceBtn') : null;
+        if (btn) {
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Testing...</span>';
+            btn.disabled = true;
+        }
+
+        testUtt.onstart = () => {
+            if (this.soundwaveEl) this.soundwaveEl.classList.remove('paused');
+            if (this.statusTextEl) this.statusTextEl.textContent = 'Testing voice output...';
+        };
+
+        const resetBtn = () => {
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Test Voice</span>';
+                btn.disabled = false;
+            }
+            if (this.soundwaveEl) this.soundwaveEl.classList.add('paused');
+            this.updateStatusInfo();
+        };
+
+        testUtt.onend = resetBtn;
+        testUtt.onerror = (e) => {
+            console.warn('Voice test error:', e);
+            resetBtn();
+        };
+
+        if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+        window.speechSynthesis.speak(testUtt);
     }
 
     prevSentence() {
@@ -716,6 +875,12 @@ class EBookTTSReader {
                         </select>
                     </div>
 
+                    <!-- Test Voice Button -->
+                    <button class="reader-btn tts-test-voice-btn" id="ttsTestVoiceBtn" title="Test / Preview Current Voice" style="padding:5px 10px; background:#2563eb; color:#fff; border-color:#3b82f6; display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600;">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>Test Voice</span>
+                    </button>
+
                     <!-- Toggle Transcript Drawer -->
                     <button class="reader-btn" id="ttsToggleDrawerBtn" title="Toggle Live Transcript" style="padding:5px 9px;">
                         <i class="fa-solid fa-list-ol"></i>
@@ -805,6 +970,14 @@ class EBookTTSReader {
         this.voiceSelectEl.addEventListener('change', (e) => {
             this.setVoice(e.target.value);
         });
+
+        // Test Voice Button
+        const testBtn = this.dockEl.querySelector('#ttsTestVoiceBtn');
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                this.testCurrentVoice();
+            });
+        }
 
         // Mode Pills
         this.dockEl.querySelectorAll('.tts-mode-btn').forEach(btn => {

@@ -93,6 +93,8 @@ $backUrl = $_SESSION['role'] === 'student' ? basePath() . '/student/virtual-libr
 <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 </script>
+<!-- Digital Reader TTS Engine -->
+<script src="<?= basePath() ?>/assets/js/reader-tts.js"></script>
 <style>
 /* Dedicated Reader Styles */
 body.reader-body {
@@ -533,24 +535,32 @@ pdfjsLib.getDocument(pdfUrl).promise.then(function(doc) {
     renderPage(currentPageNum);
 
     // Initialize TTS Engine
-    if (typeof window.initEBookTTS === 'function') {
-        window.initEBookTTS({
-            bookId: bookId,
-            bookTitle: <?= json_encode($book['title']) ?>,
-            totalPages: totalPagesCount,
-            currentPage: currentPageNum,
-            onPageChange: function(newPage) {
-                goToPage(newPage);
-            }
-        });
+    function setupTTS() {
+        if (!window.ttsReader && typeof window.initEBookTTS === 'function') {
+            window.ttsReader = window.initEBookTTS({
+                bookId: bookId,
+                bookTitle: <?= json_encode($book['title']) ?>,
+                totalPages: totalPagesCount || 1,
+                currentPage: currentPageNum || 1,
+                onPageChange: function(newPage) {
+                    goToPage(newPage);
+                }
+            });
+        }
+        return window.ttsReader;
     }
+
+    setupTTS();
 
     // Connect header Listen / Read Aloud button
     const ttsHeaderBtn = document.getElementById('readAloudToggleBtn');
     if (ttsHeaderBtn) {
         ttsHeaderBtn.addEventListener('click', () => {
-            if (window.ttsReader) {
-                window.ttsReader.toggleDock();
+            const reader = setupTTS();
+            if (reader) {
+                reader.toggleDock();
+            } else {
+                showToast("Loading voice speech engine...");
             }
         });
     }
@@ -564,6 +574,19 @@ pdfjsLib.getDocument(pdfUrl).promise.then(function(doc) {
     canvasWrapper.style.display = 'none';
     fallbackFrame.style.display = 'block';
     showToast("Loaded through browser PDF viewer");
+
+    // Still allow TTS reader for selection in fallback mode
+    if (typeof window.initEBookTTS === 'function' && !window.ttsReader) {
+        window.ttsReader = window.initEBookTTS({
+            bookId: bookId,
+            bookTitle: <?= json_encode($book['title']) ?>,
+            totalPages: totalPagesCount || 1,
+            currentPage: currentPageNum || 1,
+            onPageChange: function(newPage) {
+                goToPage(newPage);
+            }
+        });
+    }
 });
 
 function renderPage(num) {
@@ -883,6 +906,5 @@ window.addEventListener('beforeunload', () => {
     }));
 });
 </script>
-<script src="<?= basePath() ?>/assets/js/reader-tts.js"></script>
 </body>
 </html>

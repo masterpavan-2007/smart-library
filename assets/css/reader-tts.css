@@ -327,6 +327,25 @@
     border-color: #3b82f6;
 }
 
+.tts-test-voice-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border: 1px solid #3b82f6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    transition: all 0.2s ease;
+}
+
+.tts-test-voice-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.5);
+}
+
+.tts-test-voice-btn.active {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    border-color: #10b981 !important;
+}
+
 /* Secondary Advanced Bar (Chapters, Auto-play, Mode) */
 .tts-advanced-bar {
     display: flex;
