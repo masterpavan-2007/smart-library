@@ -308,21 +308,30 @@ include __DIR__ . '/../includes/header.php';
 <script>
 const chartColors = ['#4f46e5','#16a34a','#ca8a04','#dc2626','#0891b2','#9333ea','#db2777','#65a30d'];
 
+function updateChartThemeDefaults() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (window.Chart) {
+        Chart.defaults.color = isDark ? '#94a3b8' : '#6b7280';
+        Chart.defaults.borderColor = isDark ? '#243249' : '#e5e7eb';
+    }
+}
+updateChartThemeDefaults();
+
 // Monthly issues vs returns
-new Chart(document.getElementById('issueReturnChart'), {
+const chart1 = new Chart(document.getElementById('issueReturnChart'), {
     type: 'line',
     data: {
         labels: <?= json_encode($monthLabels) ?>,
         datasets: [
-            { label: 'Issued', data: <?= json_encode($issueSeries) ?>, borderColor: '#4f46e5', backgroundColor: '#4f46e5', tension: 0.3 },
-            { label: 'Returned', data: <?= json_encode($returnSeries) ?>, borderColor: '#16a34a', backgroundColor: '#16a34a', tension: 0.3 }
+            { label: 'Issued', data: <?= json_encode($issueSeries) ?>, borderColor: '#6366f1', backgroundColor: '#6366f1', tension: 0.3 },
+            { label: 'Returned', data: <?= json_encode($returnSeries) ?>, borderColor: '#22c55e', backgroundColor: '#22c55e', tension: 0.3 }
         ]
     },
     options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
 });
 
 // Physical category chart
-new Chart(document.getElementById('categoryChart'), {
+const chart2 = new Chart(document.getElementById('categoryChart'), {
     type: 'doughnut',
     data: {
         labels: <?= json_encode(array_column($catDist, 'name')) ?>,
@@ -332,7 +341,7 @@ new Chart(document.getElementById('categoryChart'), {
 });
 
 // Virtual category chart
-new Chart(document.getElementById('virtCatChart'), {
+const chart3 = new Chart(document.getElementById('virtCatChart'), {
     type: 'pie',
     data: {
         labels: <?= json_encode(array_column($virtCatDist, 'name')) ?>,
@@ -342,13 +351,18 @@ new Chart(document.getElementById('virtCatChart'), {
 });
 
 // Top Digital Books chart
-new Chart(document.getElementById('topDigitalChart'), {
+const chart4 = new Chart(document.getElementById('topDigitalChart'), {
     type: 'bar',
     data: {
         labels: <?= json_encode(array_column($topDigitalBooks, 'title')) ?>,
         datasets: [{ label: 'Views', data: <?= json_encode(array_column($topDigitalBooks, 'view_count')) ?>, backgroundColor: '#0891b2', borderRadius: 6 }]
     },
     options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+});
+
+window.addEventListener('themechange', function() {
+    updateChartThemeDefaults();
+    [chart1, chart2, chart3, chart4].forEach(c => c && c.update());
 });
 </script>
 

@@ -13,6 +13,15 @@ $bp = basePath();
 <title><?= e($pageTitle ?? 'Smart Library') ?> · Smart Library</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="<?= $bp ?>/assets/css/style.css?v=<?= @filemtime(__DIR__ . '/../assets/css/style.css') ?: time() ?>">
+<script>
+(function() {
+    try {
+        var saved = localStorage.getItem('smart_library_theme');
+        var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {}
+})();
+</script>
 </head>
 <body>
 <div class="app-shell">

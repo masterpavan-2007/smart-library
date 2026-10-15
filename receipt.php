@@ -74,21 +74,41 @@ $backUrl = match($_SESSION['role']) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receipt #<?= e($receiptNo) ?> &middot; <?= e($libraryName) ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --text: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f1f5f9;
-            color: var(--text);
-            padding: 30px 16px;
-            font-size: 14px;
-        }
+<script>
+(function() {
+    try {
+        var saved = localStorage.getItem('smart_library_theme');
+        var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {}
+})();
+</script>
+<style>
+    :root {
+        --primary: #4f46e5;
+        --text: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    [data-theme="dark"] {
+        --primary: #6366f1;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #243249;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: #f1f5f9;
+        color: var(--text);
+        padding: 30px 16px;
+        font-size: 14px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    [data-theme="dark"] body {
+        background: #0b0f19;
+        color: #f1f5f9;
+    }
         .receipt-wrapper {
             max-width: 720px;
             margin: 0 auto;
@@ -263,23 +283,78 @@ $backUrl = match($_SESSION['role']) {
             background: #f0fdf4;
         }
 
-        .receipt-footer {
-            text-align: center;
-            margin-top: 28px;
-            padding-top: 18px;
-            border-top: 1px solid var(--border);
-            font-size: 12px;
-            color: var(--text-muted);
+        /* Dark mode styles */
+        [data-theme="dark"] .btn-outline {
+            background: #141c2e;
+            border-color: #243249;
+            color: #e2e8f0;
         }
+        [data-theme="dark"] .btn-outline:hover {
+            background: #1e293b;
+            border-color: #334155;
+            color: #ffffff;
+        }
+        [data-theme="dark"] .receipt-card {
+            background: #141c2e;
+            border-color: #243249;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+        }
+        [data-theme="dark"] .receipt-title { color: #f8fafc; }
+        [data-theme="dark"] .receipt-header { border-bottom-color: #243249; }
+        [data-theme="dark"] .meta-strip {
+            background: #0d1424;
+            border-color: #243249;
+        }
+        [data-theme="dark"] .meta-item strong { color: #f8fafc; }
+        [data-theme="dark"] .info-grid { background: transparent; }
+        [data-theme="dark"] .info-row { border-bottom-color: #1a2538; }
+        [data-theme="dark"] .info-value { color: #f8fafc; }
+        [data-theme="dark"] .divider { border-top-color: #243249; }
+        [data-theme="dark"] .divider-dashed { border-top-color: #243249; }
+        [data-theme="dark"] .financial-table th {
+            background: #0d1424;
+            border-bottom-color: #243249;
+            color: #94a3b8;
+        }
+        [data-theme="dark"] .financial-table td { border-bottom-color: #1a2538; }
+        [data-theme="dark"] .total-row td {
+            background: #0f1828;
+            border-color: #243249;
+            color: #f8fafc;
+        }
+        [data-theme="dark"] .receipt-footer { border-top-color: #243249; }
+        [data-theme="dark"] .receipt-footer p[style*="#334155"] { color: #cbd5e1 !important; }
+        [data-theme="dark"] div[style*="background:#f8fafc"],
+        [data-theme="dark"] div[style*="background: #f8fafc"] {
+            background: #0d1424 !important;
+            border-color: #243249 !important;
+        }
+        [data-theme="dark"] strong[style*="color:#0f172a"],
+        [data-theme="dark"] code[style*="color:#0f172a"] {
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .watermark { color: rgba(34, 197, 94, 0.04); }
 
-        /* Print styles */
+        /* Print styles - forces clean paper print */
         @media print {
-            body { background: #fff; padding: 0; }
+            html, body { background: #fff !important; color: #000 !important; padding: 0 !important; }
             .action-bar { display: none !important; }
             .receipt-card {
+                background: #fff !important;
                 box-shadow: none !important;
                 border: 1px solid #000 !important;
                 padding: 24px 28px !important;
+                color: #000 !important;
+            }
+            .receipt-title, .inst-name, .inst-meta, .meta-item strong, .info-value, .financial-table th, .financial-table td, .total-row td {
+                color: #000 !important;
+            }
+            .meta-strip, .financial-table th, .total-row td {
+                background: #f8fafc !important;
+                border-color: #e2e8f0 !important;
+            }
+            .financial-table td, .info-row {
+                border-bottom-color: #e2e8f0 !important;
             }
             .watermark { color: rgba(0,0,0,0.06) !important; }
             @page {
@@ -297,7 +372,10 @@ $backUrl = match($_SESSION['role']) {
         <a href="<?= e($backUrl) ?>" class="btn btn-outline">
             <i class="fa-solid fa-arrow-left"></i> Return
         </a>
-        <div style="display:flex; gap:10px;">
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button type="button" class="btn btn-outline" id="receiptThemeBtn" onclick="toggleReceiptTheme()" title="Toggle Dark / Light Mode">
+                <i class="fa-solid fa-moon"></i> <span id="receiptThemeText">Dark Mode</span>
+            </button>
             <button onclick="window.print()" class="btn btn-primary">
                 <i class="fa-solid fa-print"></i> Print Receipt
             </button>
@@ -466,6 +544,31 @@ $backUrl = match($_SESSION['role']) {
 function downloadAsPdf() {
     window.print();
 }
+
+function updateReceiptThemeUI() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var btn = document.getElementById('receiptThemeBtn');
+    var text = document.getElementById('receiptThemeText');
+    if (btn && text) {
+        if (isDark) {
+            btn.innerHTML = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i> <span id="receiptThemeText">Light Mode</span>';
+        } else {
+            btn.innerHTML = '<i class="fa-solid fa-moon"></i> <span id="receiptThemeText">Dark Mode</span>';
+        }
+    }
+}
+
+function toggleReceiptTheme() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var next = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try {
+        localStorage.setItem('smart_library_theme', next);
+    } catch(e) {}
+    updateReceiptThemeUI();
+}
+
+document.addEventListener('DOMContentLoaded', updateReceiptThemeUI);
 </script>
 
 </body>

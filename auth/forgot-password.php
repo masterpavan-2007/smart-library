@@ -136,6 +136,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <title>Forgot Password · Smart Library</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="<?= basePath() ?>/assets/css/style.css">
+<script>
+(function() {
+    try {
+        var saved = localStorage.getItem('smart_library_theme');
+        var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {}
+})();
+</script>
 <style>
 .auth-card {
     max-width: 440px;
@@ -148,6 +157,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     margin-top: 14px;
     font-size: 13px;
     text-align: left;
+}
+[data-theme="dark"] .reset-link-preview {
+    background: #0d1424;
+    border-color: #243249;
 }
 .reset-link-preview a {
     word-break: break-all;
@@ -168,10 +181,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 .copy-btn:hover {
     background: #cbd5e1;
 }
+[data-theme="dark"] .copy-btn {
+    background: #1e2a42;
+    color: #e2e8f0;
+}
 </style>
 </head>
 <body>
 <div class="auth-wrap">
+    <div class="auth-theme-toggle">
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
+            <i class="fa-solid fa-moon theme-toggle-icon"></i>
+        </button>
+    </div>
     <div class="auth-card">
         <div class="logo"><i class="fa-solid fa-key"></i></div>
         <h2 class="text-center">Forgot Password</h2>
@@ -243,5 +265,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
     </div>
 </div>
+<script src="<?= basePath() ?>/assets/js/script.js"></script>
 </body>
 </html>

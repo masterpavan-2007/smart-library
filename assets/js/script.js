@@ -1,3 +1,62 @@
+// =====================================================================
+// Theme Management (Dark / Light Mode)
+// =====================================================================
+window.toggleTheme = function () {
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+
+  document.documentElement.classList.add('theme-transitioning');
+  document.documentElement.setAttribute('data-theme', next);
+
+  try {
+    localStorage.setItem('smart_library_theme', next);
+  } catch (e) {}
+
+  window.updateThemeUI(next);
+  window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+
+  setTimeout(function () {
+    document.documentElement.classList.remove('theme-transitioning');
+  }, 350);
+};
+
+window.updateThemeUI = function (theme) {
+  const isDark = theme === 'dark';
+  
+  // Update all theme toggle buttons
+  document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn').forEach(function (btn) {
+    btn.setAttribute('aria-label', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    btn.setAttribute('title', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    const icon = btn.querySelector('i');
+    if (icon) {
+      if (isDark) {
+        icon.className = 'fa-solid fa-sun theme-toggle-icon';
+        icon.style.color = '#fbbf24';
+      } else {
+        icon.className = 'fa-solid fa-moon theme-toggle-icon';
+        icon.style.color = '';
+      }
+    }
+  });
+
+  // Update user dropdown menu item text
+  const menuText = document.getElementById('userMenuThemeText');
+  if (menuText) {
+    menuText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+  }
+
+  // Update receipt theme button if present
+  const receiptBtn = document.getElementById('receiptThemeBtn');
+  const receiptText = document.getElementById('receiptThemeText');
+  if (receiptBtn && receiptText) {
+    if (isDark) {
+      receiptBtn.innerHTML = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i> <span id="receiptThemeText">Light Mode</span>';
+    } else {
+      receiptBtn.innerHTML = '<i class="fa-solid fa-moon"></i> <span id="receiptThemeText">Dark Mode</span>';
+    }
+  }
+};
+
 window.toggleUserDropdown = function (e) {
   if (e) {
     if (typeof e.stopPropagation === 'function') e.stopPropagation();
@@ -12,6 +71,21 @@ window.toggleUserDropdown = function (e) {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Initialize theme UI
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  window.updateThemeUI(currentTheme);
+
+  // Listen for system theme changes if no explicit user override is stored
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      if (!localStorage.getItem('smart_library_theme')) {
+        const autoTheme = e.matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', autoTheme);
+        window.updateThemeUI(autoTheme);
+        window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: autoTheme } }));
+      }
+    });
+  }
   // Sidebar toggle (mobile)
   const toggleBtn = document.querySelector('.menu-toggle');
   const sidebar = document.querySelector('.sidebar');

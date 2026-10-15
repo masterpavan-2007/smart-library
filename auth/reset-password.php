@@ -41,9 +41,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken) {
 <title>Reset Password · Smart Library</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="<?= basePath() ?>/assets/css/style.css">
+<script>
+(function() {
+    try {
+        var saved = localStorage.getItem('smart_library_theme');
+        var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {}
+})();
+</script>
 </head>
 <body>
 <div class="auth-wrap">
+    <div class="auth-theme-toggle">
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
+            <i class="fa-solid fa-moon theme-toggle-icon"></i>
+        </button>
+    </div>
     <div class="auth-card">
         <div class="logo"><i class="fa-solid fa-lock-open"></i></div>
         <h2 class="text-center">Reset Password</h2>
@@ -74,5 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken) {
         <p class="text-center" style="margin-top:16px;"><a href="login.php">&larr; Back to login</a></p>
     </div>
 </div>
+<script src="<?= basePath() ?>/assets/js/script.js"></script>
 </body>
 </html>

@@ -51,6 +51,9 @@ if ($userEmail === '' && isset($pdo, $_SESSION['user_id'])) {
         <div class="page-title"><?= e($pageTitle ?? 'Dashboard') ?></div>
     </div>
     <div class="topbar-right">
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
+            <i class="fa-solid fa-moon theme-toggle-icon"></i>
+        </button>
         <a href="<?= e($notifLink) ?>" class="bell" title="Notifications">
             <i class="fa-solid fa-bell"></i>
             <?php if ($unreadCount > 0): ?>
@@ -81,6 +84,11 @@ if ($userEmail === '' && isset($pdo, $_SESSION['user_id'])) {
                     <i class="<?= e($profileIcon) ?>"></i>
                     <span><?= e($profileLabel) ?></span>
                 </a>
+                <div class="dropdown-divider"></div>
+                <button type="button" class="dropdown-item" onclick="toggleTheme()" role="menuitem">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                    <span id="userMenuThemeText">Dark Mode</span>
+                </button>
                 <div class="dropdown-divider"></div>
                 <a href="<?= basePath() ?>/auth/logout.php" class="dropdown-item dropdown-item-danger" role="menuitem">
                     <i class="fa-solid fa-right-from-bracket"></i>
