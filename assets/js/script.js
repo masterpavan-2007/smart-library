@@ -23,11 +23,11 @@ window.toggleTheme = function () {
 window.updateThemeUI = function (theme) {
   const isDark = theme === 'dark';
   
-  // Update all theme toggle buttons
-  document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn').forEach(function (btn) {
+  // Update all theme switch pills and buttons
+  document.querySelectorAll('#themeToggleBtn, .theme-switch-pill, .theme-toggle-btn').forEach(function (btn) {
     btn.setAttribute('aria-label', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
     btn.setAttribute('title', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
-    const icon = btn.querySelector('i');
+    const icon = btn.querySelector('.theme-toggle-icon');
     if (icon) {
       if (isDark) {
         icon.className = 'fa-solid fa-sun theme-toggle-icon';

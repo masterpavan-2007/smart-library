@@ -446,4 +446,9 @@ include __DIR__ . '/../includes/header.php';
 </div>
 <?php endif; ?>
 
+<!-- Updated Theme Showcase Component (Reference Mockup) -->
+<div style="margin-top:20px;">
+    <?php include __DIR__ . '/../color-palette-component/palette.php'; ?>
+</div>
+
 <?php include __DIR__ . '/../includes/footer.php'; ?>

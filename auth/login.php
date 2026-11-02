@@ -68,6 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login · Smart Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="<?= basePath() ?>/assets/css/style.css">
 <script>
@@ -80,54 +83,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 })();
 </script>
 </head>
-<body>
+<body class="auth-page-body">
 <div class="auth-wrap">
     <div class="auth-theme-toggle">
-        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
-            <i class="fa-solid fa-moon theme-toggle-icon"></i>
+        <button type="button" class="theme-switch-pill" id="themeToggleBtn" aria-label="Toggle Dark / Light Mode" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
+            <span class="theme-switch-track-icon track-sun"><i class="fa-solid fa-sun"></i></span>
+            <span class="theme-switch-track-icon track-moon"><i class="fa-solid fa-moon"></i></span>
+            <span class="theme-switch-thumb">
+                <i class="fa-solid fa-sun thumb-icon-sun"></i>
+                <i class="fa-solid fa-moon thumb-icon-moon"></i>
+            </span>
         </button>
     </div>
     <div class="auth-card">
-        <div class="logo"><i class="fa-solid fa-book-open"></i></div>
-        <h2 class="text-center">Smart Library</h2>
-        <p class="sub">Sign in to manage or use the library</p>
+        <div class="auth-logo-squircle">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+        <h2 class="auth-title">Smart Library</h2>
+        <p class="auth-subtitle">Sign in to manage or use the library</p>
 
         <?php foreach ($errors as $err): ?>
             <div class="alert alert-error"><i class="fa-solid fa-circle-exclamation"></i> <?= e($err) ?></div>
         <?php endforeach; ?>
 
-        <form method="POST" action="login.php" autocomplete="off">
+        <form method="POST" action="login.php" autocomplete="off" class="auth-form">
             <?= csrfField() ?>
             <div class="form-group">
                 <label>Email / Username</label>
                 <div class="input-icon">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="text" name="email" class="form-control" placeholder="you@example.com" value="<?= e($emailOld) ?>" required>
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="text" name="email" class="form-control pill-input" placeholder="you@example.com" value="<?= e($emailOld) ?>" required>
                 </div>
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <div class="input-icon">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Your password" required>
+                    <input type="password" id="loginPassword" name="password" class="form-control pill-input" placeholder="••••••" required>
                     <i class="fa-solid fa-eye password-toggle" data-target="loginPassword"></i>
                 </div>
             </div>
             <div class="form-group">
                 <label>Login as</label>
-                <select name="role" class="form-control" required>
-                    <option value="">-- Select role --</option>
-                    <option value="admin">Library Owner / Admin</option>
-                    <option value="librarian">Reception / Librarian</option>
-                    <option value="student">Student</option>
-                </select>
+                <div class="input-icon select-with-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <select name="role" class="form-control pill-input" required>
+                        <option value="">-- Select role --</option>
+                        <option value="student" selected>Student</option>
+                        <option value="librarian">Staff / Librarian</option>
+                        <option value="admin">Admin / Library Owner</option>
+                    </select>
+                </div>
             </div>
             <div class="auth-links">
-                <label><input type="checkbox" name="remember"> Remember me</label>
-                <a href="forgot-password.php">Forgot password?</a>
+                <label class="remember-checkbox"><input type="checkbox" name="remember"> <span>Remember me</span></label>
+                <a href="forgot-password.php" class="forgot-link">Forgot password?</a>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
-                <i class="fa-solid fa-right-to-bracket"></i> Login
+            <button type="submit" class="btn btn-auth-login">
+                Login
             </button>
         </form>
 

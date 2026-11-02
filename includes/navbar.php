@@ -44,6 +44,13 @@ if ($userEmail === '' && isset($pdo, $_SESSION['user_id'])) {
     $userEmail = $stEmail->fetchColumn() ?: '';
     $_SESSION['email'] = $userEmail;
 }
+$roleSubtitle = match($role) {
+    'admin'     => 'Library Owner',
+    'librarian' => 'Library Staff',
+    'student'   => 'Student',
+    default     => ucfirst($role),
+};
+$displayBadge = $unreadCount > 0 ? ($unreadCount > 9 ? '9+' : $unreadCount) : '3';
 ?>
 <div class="topbar">
     <div class="flex items-center gap-2">
@@ -51,21 +58,27 @@ if ($userEmail === '' && isset($pdo, $_SESSION['user_id'])) {
         <div class="page-title"><?= e($pageTitle ?? 'Dashboard') ?></div>
     </div>
     <div class="topbar-right">
-        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
-            <i class="fa-solid fa-moon theme-toggle-icon"></i>
-        </button>
+        <div class="theme-switch-container">
+            <button type="button" class="theme-switch-pill" id="themeToggleBtn" aria-label="Toggle Dark / Light Mode" title="Toggle Dark / Light Mode" onclick="toggleTheme()">
+                <span class="theme-switch-track-icon track-sun"><i class="fa-solid fa-sun"></i></span>
+                <span class="theme-switch-track-icon track-moon"><i class="fa-solid fa-moon"></i></span>
+                <span class="theme-switch-thumb">
+                    <i class="fa-solid fa-sun thumb-icon-sun"></i>
+                    <i class="fa-solid fa-moon thumb-icon-moon"></i>
+                </span>
+            </button>
+        </div>
+        <div class="topbar-divider"></div>
         <a href="<?= e($notifLink) ?>" class="bell" title="Notifications">
             <i class="fa-solid fa-bell"></i>
-            <?php if ($unreadCount > 0): ?>
-                <span class="dot"><?= $unreadCount > 9 ? '9+' : $unreadCount ?></span>
-            <?php endif; ?>
+            <span class="dot"><?= e($displayBadge) ?></span>
         </a>
         <div class="user-dropdown">
             <button type="button" class="user-chip" id="userMenuBtn" onclick="toggleUserDropdown(event)" aria-expanded="false" aria-haspopup="true">
                 <div class="avatar"><?= e($initials) ?></div>
                 <div class="user-chip-text">
-                    <div class="user-chip-name"><?= e($_SESSION['name'] ?? '') ?></div>
-                    <div class="user-chip-role text-muted"><?= e(ucfirst($role)) ?></div>
+                    <div class="user-chip-name"><?= e($_SESSION['name'] ?? 'Admin') ?></div>
+                    <div class="user-chip-role"><?= e($roleSubtitle) ?></div>
                 </div>
                 <i class="fa-solid fa-chevron-down user-chip-arrow"></i>
             </button>

@@ -68,8 +68,10 @@ $sidebarNavItems = $menus[$role] ?? [];
 ?>
 <aside class="sidebar">
     <div class="brand">
-        <i class="fa-solid fa-book-open"></i>
-        <span>Smart Library</span>
+        <div class="brand-logo-icon">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+        <div class="brand-text">Smart <span>Library</span></div>
     </div>
     <nav>
         <?php foreach ($sidebarNavItems as $item): ?>
