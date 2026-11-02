@@ -265,11 +265,6 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
-<!-- 3. Updated Theme Showcase Component (Exact Reference Mockup) -->
-<div style="margin-top:20px;">
-    <?php include __DIR__ . '/../color-palette-component/palette.php'; ?>
-</div>
-
 <!-- Section: Physical Library Stat Cards -->
 <div style="margin-bottom:8px;">
     <h3 style="font-size:16px; margin:0 0 10px 0; color:var(--text); display:flex; align-items:center; gap:8px;">

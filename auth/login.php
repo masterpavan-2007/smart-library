@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="<?= basePath() ?>/assets/css/style.css">
+<link rel="stylesheet" href="<?= basePath() ?>/assets/css/style.css?v=<?= @filemtime(__DIR__ . '/../assets/css/style.css') ?: time() ?>">
 <script>
 (function() {
     try {
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-logo-squircle">
             <i class="fa-solid fa-book-open"></i>
         </div>
-        <h2 class="auth-title">Smart Library</h2>
+        <h2 class="auth-title">Smart <span>Library</span></h2>
         <p class="auth-subtitle">Sign in to manage or use the library</p>
 
         <?php foreach ($errors as $err): ?>
@@ -112,31 +112,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Email / Username</label>
                 <div class="input-icon">
                     <i class="fa-regular fa-envelope"></i>
-                    <input type="text" name="email" class="form-control pill-input" placeholder="you@example.com" value="<?= e($emailOld) ?>" required>
+                    <input type="text" name="email" class="form-control auth-input" placeholder="you@example.com" value="<?= e($emailOld) ?>" required>
                 </div>
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <div class="input-icon">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="loginPassword" name="password" class="form-control pill-input" placeholder="••••••" required>
-                    <i class="fa-solid fa-eye password-toggle" data-target="loginPassword"></i>
+                    <input type="password" id="loginPassword" name="password" class="form-control auth-input" placeholder="••••••" required>
+                    <i class="fa-regular fa-eye password-toggle" data-target="loginPassword"></i>
                 </div>
             </div>
             <div class="form-group">
                 <label>Login as</label>
                 <div class="input-icon select-with-icon">
                     <i class="fa-solid fa-graduation-cap"></i>
-                    <select name="role" class="form-control pill-input" required>
-                        <option value="">-- Select role --</option>
-                        <option value="student" selected>Student</option>
+                    <select name="role" class="form-control auth-input" required>
+                        <option value="" selected>Select role</option>
+                        <option value="student">Student</option>
                         <option value="librarian">Staff / Librarian</option>
                         <option value="admin">Admin / Library Owner</option>
                     </select>
+                    <i class="fa-solid fa-chevron-down auth-select-chevron"></i>
                 </div>
             </div>
             <div class="auth-links">
-                <label class="remember-checkbox"><input type="checkbox" name="remember"> <span>Remember me</span></label>
+                <label class="remember-checkbox">
+                    <input type="checkbox" name="remember"> 
+                    <span>Remember me</span>
+                </label>
                 <a href="forgot-password.php" class="forgot-link">Forgot password?</a>
             </div>
             <button type="submit" class="btn btn-auth-login">

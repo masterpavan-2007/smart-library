@@ -117,21 +117,21 @@ include __DIR__ . '/../includes/header.php';
 
 <!-- ================== OUTSTANDING FINE & INSTANT PAY BANNER ================== -->
 <?php if ($pendingFines > 0 || !empty($myUnpaidFines)): ?>
-    <div class="card" style="margin-bottom:20px; border:2px solid #ef4444; border-radius:14px; background:linear-gradient(135deg, #fffbfb 0%, #ffffff 100%); box-shadow:0 6px 20px rgba(239,68,68,0.12); padding:20px 24px;">
+    <div class="card student-fine-banner" style="margin-bottom:20px; border:2px solid #ef4444; border-radius:18px; padding:20px 24px;">
         <div class="flex items-center justify-between" style="flex-wrap:wrap; gap:16px;">
             <div style="flex:1; min-width:280px;">
                 <div class="flex items-center gap-2" style="margin-bottom:8px;">
                     <span class="badge badge-red" style="font-size:12px; padding:4px 10px;"><i class="fa-solid fa-triangle-exclamation"></i> Action Required</span>
                     <span class="text-muted" style="font-size:13px;">Late Return Overdue Charges</span>
                 </div>
-                <h3 style="margin:0 0 8px 0; font-size:20px; color:#991b1b; display:flex; align-items:center; gap:8px;">
+                <h3 style="margin:0 0 8px 0; font-size:20px; color:#ef4444; display:flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-receipt text-danger"></i> Outstanding Library Fine
                 </h3>
-                <div style="display:flex; flex-wrap:wrap; gap:16px; font-size:14px; color:#374151;">
-                    <div>Student: <strong style="color:#111827;"><?= e($_SESSION['name'] ?? 'Student') ?></strong></div>
-                    <div>&bull; Student ID: <strong style="color:#111827;"><?= e($student['roll_number']) ?></strong></div>
+                <div style="display:flex; flex-wrap:wrap; gap:16px; font-size:14px; color:var(--text-muted);">
+                    <div>Student: <strong style="color:var(--text);"><?= e($_SESSION['name'] ?? 'Student') ?></strong></div>
+                    <div>&bull; Student ID: <strong style="color:var(--text);"><?= e($student['roll_number']) ?></strong></div>
                     <?php if (!empty($myUnpaidFines)): ?>
-                        <div>&bull; Book: <strong style="color:#111827;"><?= e($myUnpaidFines[0]['book_title'] ?? 'Overdue Book') ?></strong></div>
+                        <div>&bull; Book: <strong style="color:var(--text);"><?= e($myUnpaidFines[0]['book_title'] ?? 'Overdue Book') ?></strong></div>
                         <div>&bull; Overdue Days: <span class="badge badge-red"><?= (int)$myUnpaidFines[0]['late_days'] ?> Days Late</span></div>
                     <?php endif; ?>
                 </div>
@@ -139,14 +139,14 @@ include __DIR__ . '/../includes/header.php';
 
             <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
                 <div class="text-muted" style="font-size:12px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;">Outstanding Fine</div>
-                <div style="font-size:34px; font-weight:800; color:#dc2626; line-height:1; letter-spacing:-0.02em;">
+                <div style="font-size:34px; font-weight:800; color:#ef4444; line-height:1; letter-spacing:-0.02em;">
                     &#8377;<?= number_format($pendingFines, 2) ?>
                 </div>
                 <div class="flex gap-2" style="margin-top:6px;">
                     <a href="pay-fine.php?fine_id=<?= !empty($myUnpaidFines) ? $myUnpaidFines[0]['id'] : 'all' ?>" class="btn btn-primary" style="background:#dc2626; border-color:#dc2626; padding:10px 24px; font-weight:700; font-size:14px; box-shadow:0 3px 10px rgba(220,38,38,0.35); display:inline-flex; align-items:center; gap:8px;">
                         <i class="fa-solid fa-qrcode"></i> PAY NOW
                     </a>
-                    <a href="fines.php" class="btn btn-outline" style="border-color:#d1d5db; background:#fff; color:#374151;">
+                    <a href="fines.php" class="btn btn-outline">
                         <i class="fa-solid fa-list-check"></i> My Fines
                     </a>
                 </div>
@@ -307,20 +307,20 @@ include __DIR__ . '/../includes/header.php';
 
 <!-- Continue Reading Banner (If In Progress) -->
 <?php if (!empty($continueReading)): ?>
-<div class="card" style="margin-top:18px; border-left:4px solid var(--primary); background:linear-gradient(to right, #f8fafc, #ffffff);">
+<div class="card continue-reading-card" style="margin-top:18px;">
     <div class="flex justify-between items-center" style="margin-bottom:12px;">
         <h3 style="margin:0; font-size:16px;"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Continue Reading</h3>
         <a href="virtual-library.php" style="font-size:13px; font-weight:600;">Go to Virtual Library &rarr;</a>
     </div>
     <div class="grid grid-2">
         <?php foreach ($continueReading as $cr): ?>
-            <div style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div class="continue-reading-item">
                 <div style="flex:1; min-width:0; margin-right:12px;">
                     <span class="badge badge-blue" style="font-size:10.5px;"><?= e($cr['category_name']) ?></span>
-                    <strong style="display:block; font-size:14px; margin:4px 0 2px 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><?= e($cr['title']) ?></strong>
+                    <strong class="continue-reading-title"><?= e($cr['title']) ?></strong>
                     <div class="text-muted" style="font-size:12px; margin-bottom:8px;">Page <?= (int)$cr['last_page'] ?> of <?= (int)$cr['pages'] ?> (<?= round((float)$cr['progress_percent']) ?>%)</div>
-                    <div style="background:var(--border); border-radius:6px; height:5px; overflow:hidden; width:100%;">
-                        <div style="background:var(--primary); width:<?= (float)$cr['progress_percent'] ?>%; height:100%;"></div>
+                    <div class="reading-progress-track">
+                        <div class="reading-progress-fill" style="width:<?= (float)$cr['progress_percent'] ?>%;"></div>
                     </div>
                 </div>
                 <a href="read-book.php?id=<?= $cr['digital_book_id'] ?>" class="btn btn-sm btn-primary">
@@ -445,10 +445,5 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 <?php endif; ?>
-
-<!-- Updated Theme Showcase Component (Reference Mockup) -->
-<div style="margin-top:20px;">
-    <?php include __DIR__ . '/../color-palette-component/palette.php'; ?>
-</div>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

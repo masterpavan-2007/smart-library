@@ -167,11 +167,6 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
-<!-- 3. Updated Theme Showcase Component -->
-<div style="margin-top:20px;">
-    <?php include __DIR__ . '/../color-palette-component/palette.php'; ?>
-</div>
-
 <div class="grid grid-4" style="margin-top:20px;">
     <div class="card stat-card"><div class="icon blue"><i class="fa-solid fa-right-from-bracket"></i></div><div><div class="num"><?= $issuedToday ?></div><div class="label">Issued Today</div></div></div>
     <div class="card stat-card"><div class="icon green"><i class="fa-solid fa-right-to-bracket"></i></div><div><div class="num"><?= $returnedToday ?></div><div class="label">Returned Today</div></div></div>
