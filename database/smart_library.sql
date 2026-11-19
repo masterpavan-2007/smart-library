@@ -4,8 +4,8 @@
 -- Import this file through phpMyAdmin (or `mysql -u root -p < smart_library.sql`)
 -- =====================================================================
 
-CREATE DATABASE IF NOT EXISTS smart_library CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE smart_library;
+
+
 
 -- ---------------------------------------------------------------------
 -- USERS (admin + librarian/staff login accounts)
@@ -241,7 +241,9 @@ CREATE TABLE digital_books (
     author_name VARCHAR(150) NULL,
     category_id INT NULL,
     publisher_id INT NULL,
-    publication_year YEAR NULL,
+    isbn VARCHAR(30) NULL,
+    ia_id VARCHAR(100) NULL,
+    publication_year INT NULL,
     edition VARCHAR(30) DEFAULT '1st',
     language VARCHAR(40) DEFAULT 'English',
     pages INT DEFAULT 10,
@@ -264,7 +266,9 @@ CREATE TABLE digital_books (
     INDEX idx_dtitle (title),
     INDEX idx_dcat (category_id),
     INDEX idx_dauthor (author_id),
-    INDEX idx_dstatus (status)
+    INDEX idx_dstatus (status),
+    INDEX idx_disbn (isbn),
+    INDEX idx_dia (ia_id)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

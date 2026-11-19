@@ -56,6 +56,12 @@ $activeReaders = (int)$pdo->query("SELECT COUNT(DISTINCT student_id) FROM readin
 include __DIR__ . '/../includes/header.php';
 ?>
 
+<!-- Navigation Tabs -->
+<div class="flex gap-2" style="margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap;">
+    <a href="digital-books.php" class="btn btn-primary btn-sm"><i class="fa-solid fa-book-bookmark"></i> Digital Resources Catalog</a>
+    <a href="openlibrary-import.php" class="btn btn-outline btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Import from Open Library</a>
+</div>
+
 <div class="grid grid-3" style="margin-bottom:20px;">
     <div class="card stat-card">
         <div class="icon blue"><i class="fa-solid fa-file-pdf"></i></div>
@@ -71,7 +77,7 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
-<div class="table-toolbar">
+<div class="table-toolbar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
     <form method="GET" class="flex gap-2" style="flex-wrap:wrap;">
         <input type="text" name="q" class="form-control" style="width:260px;" placeholder="Search title, author, keyword..." value="<?= e($search) ?>">
         <select name="category" class="form-control" style="width:180px;">
@@ -91,6 +97,11 @@ include __DIR__ . '/../includes/header.php';
             <a href="digital-books.php" class="btn btn-outline">Clear</a>
         <?php endif; ?>
     </form>
+    <div>
+        <a href="openlibrary-import.php" class="btn btn-primary">
+            <i class="fa-solid fa-cloud-arrow-down"></i> Import from Open Library
+        </a>
+    </div>
 </div>
 
 <div class="card">

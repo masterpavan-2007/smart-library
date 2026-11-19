@@ -239,6 +239,12 @@ $totalReadingSessions = (int)$pdo->query("SELECT COUNT(*) FROM reading_history")
 include __DIR__ . '/../includes/header.php';
 ?>
 
+<!-- Navigation Tabs -->
+<div class="flex gap-2" style="margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+    <a href="digital-books.php" class="btn btn-primary btn-sm"><i class="fa-solid fa-book-bookmark"></i> Digital Books Catalog</a>
+    <a href="openlibrary-import.php" class="btn btn-outline btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Import from Open Library</a>
+</div>
+
 <!-- Metrics Summary -->
 <div class="grid grid-4" style="margin-bottom:20px;">
     <div class="card stat-card">
@@ -286,7 +292,10 @@ include __DIR__ . '/../includes/header.php';
         <?php endif; ?>
     </form>
 
-    <div>
+    <div class="flex gap-2" style="flex-wrap:wrap;">
+        <a href="openlibrary-import.php" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
+            <i class="fa-solid fa-cloud-arrow-down"></i> Import from Open Library
+        </a>
         <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Upload New Digital Book</button>
     </div>
 </div>
