@@ -38,10 +38,40 @@ if ($studentId) {
 
 // Fetch favorite book IDs for this student
 $userFavorites = [];
+$studentActiveRentals = [];
+$studentPendingRentals = [];
+
 if ($studentId) {
     $favStmt = $pdo->prepare("SELECT digital_book_id FROM favorites WHERE student_id = ? AND digital_book_id IS NOT NULL");
     $favStmt->execute([$studentId]);
     $userFavorites = $favStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // Auto-expire
+    try {
+        $pdo->query("UPDATE book_rentals SET rental_status = 'expired' WHERE rental_status = 'active' AND expiry_date < NOW()");
+    } catch (Exception $e) {}
+
+    // Active rentals
+    $rStmt = $pdo->prepare("
+        SELECT digital_book_id, expiry_date, rental_days, id, total_amount, payment_status, rental_status 
+        FROM book_rentals 
+        WHERE student_id = ? AND payment_status = 'PAID' AND rental_status = 'active' AND expiry_date >= NOW()
+    ");
+    $rStmt->execute([$studentId]);
+    while ($row = $rStmt->fetch()) {
+        $studentActiveRentals[$row['digital_book_id']] = $row;
+    }
+
+    // Pending rentals
+    $pStmt = $pdo->prepare("
+        SELECT digital_book_id, transaction_reference, total_amount, id 
+        FROM book_rentals 
+        WHERE student_id = ? AND payment_status = 'PENDING'
+    ");
+    $pStmt->execute([$studentId]);
+    while ($row = $pStmt->fetch()) {
+        $studentPendingRentals[$row['digital_book_id']] = $row;
+    }
 }
 
 // Filters
@@ -216,6 +246,7 @@ include __DIR__ . '/../includes/header.php';
             <option value="">Access Policy</option>
             <option value="free" <?= $accessFilter === 'free' ? 'selected' : '' ?>>Free / Student</option>
             <option value="open_access" <?= $accessFilter === 'open_access' ? 'selected' : '' ?>>Open Access</option>
+            <option value="rental" <?= $accessFilter === 'rental' ? 'selected' : '' ?>>Rental (₹5/day)</option>
             <option value="restricted" <?= $accessFilter === 'restricted' ? 'selected' : '' ?>>Restricted</option>
         </select>
 
@@ -308,18 +339,60 @@ include __DIR__ . '/../includes/header.php';
                 </p>
             </div>
 
-            <!-- Card Footer: Stats & Read Button -->
+            <!-- Card Footer: Stats & Read/Rent Actions -->
             <div>
+                <?php 
+                    $isRented = isset($studentActiveRentals[$b['id']]);
+                    $isPending = isset($studentPendingRentals[$b['id']]);
+                    $requiresRental = in_array($b['access_type'], ['rental', 'restricted'], true);
+                ?>
                 <div class="flex justify-between items-center text-muted" style="font-size:11.5px; border-top:1px solid var(--border); padding-top:10px; margin-bottom:12px;">
                     <span><i class="fa-solid fa-globe"></i> <?= e($b['language']) ?></span>
                     <span><i class="fa-solid fa-book-reader"></i> <?= (int)$b['read_count'] ?> readers</span>
-                    <span class="badge badge-green" style="font-size:10px;"><?= e(strtoupper($b['access_type'])) ?></span>
+                    <?php if ($isRented): 
+                        $r = $studentActiveRentals[$b['id']];
+                        $daysLeft = max(0, ceil((strtotime($r['expiry_date']) - time()) / 86400));
+                    ?>
+                        <span class="badge badge-green" style="font-size:10.5px;" title="Rental active until <?= date('d M Y', strtotime($r['expiry_date'])) ?>">
+                            <i class="fa-solid fa-clock"></i> Rented (<?= $daysLeft ?>d left)
+                        </span>
+                    <?php elseif ($isPending): ?>
+                        <span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-size:10.5px;">
+                            <i class="fa-solid fa-hourglass-half"></i> UTR Pending
+                        </span>
+                    <?php elseif ($requiresRental): ?>
+                        <span class="badge" style="background:rgba(234, 88, 12, 0.15); color:#ea580c; border:1px solid rgba(234, 88, 12, 0.3); font-weight:700; font-size:10.5px;">
+                            <i class="fa-solid fa-indian-rupee-sign"></i> ₹5/DAY RENTAL
+                        </span>
+                    <?php else: ?>
+                        <span class="badge badge-green" style="font-size:10px;"><?= strtoupper(e($b['access_type'])) ?></span>
+                    <?php endif; ?>
                 </div>
 
                 <div class="flex gap-2">
-                    <a href="read-book.php?id=<?= $b['id'] ?>" class="btn btn-primary" style="flex:1; justify-content:center;">
-                        <i class="fa-solid fa-book-open"></i> Read Online
-                    </a>
+                    <?php if ($isRented): ?>
+                        <a href="read-book.php?id=<?= $b['id'] ?>" class="btn btn-primary" style="flex:1; justify-content:center;">
+                            <i class="fa-solid fa-book-open"></i> Read Online
+                        </a>
+                        <a href="rent-book.php?id=<?= $b['id'] ?>&renew=1" class="btn btn-outline" title="Renew / Extend Rental" style="padding:0 12px; display:inline-flex; align-items:center;">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </a>
+                    <?php elseif ($isPending): ?>
+                        <a href="rentals.php" class="btn btn-outline" style="flex:1; justify-content:center; color:#d97706; border-color:#f59e0b;">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Verification Pending
+                        </a>
+                    <?php elseif ($requiresRental): ?>
+                        <a href="rent-book.php?id=<?= $b['id'] ?>" class="btn btn-primary" style="flex:1; justify-content:center; background:linear-gradient(135deg, #f97316 0%, #ea580c 100%); border:none; box-shadow:0 4px 12px rgba(234,88,12,0.25);">
+                            <i class="fa-solid fa-cart-shopping"></i> Rent This Book (₹5/day)
+                        </a>
+                    <?php else: ?>
+                        <a href="read-book.php?id=<?= $b['id'] ?>" class="btn btn-primary" style="flex:1; justify-content:center;">
+                            <i class="fa-solid fa-book-open"></i> Read Online
+                        </a>
+                        <a href="rent-book.php?id=<?= $b['id'] ?>" class="btn btn-outline" title="Rent dedicated access" style="padding:0 12px; display:inline-flex; align-items:center;">
+                            <i class="fa-solid fa-receipt"></i>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

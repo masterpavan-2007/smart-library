@@ -34,7 +34,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $language = trim($_POST['language'] ?? 'English');
         $pages = max(1, (int)($_POST['pages'] ?? 1));
         $description = trim($_POST['description'] ?? '');
-        $accessType = in_array($_POST['access_type'] ?? '', ['free', 'restricted', 'open_access']) ? $_POST['access_type'] : 'free';
+        $accessType = in_array($_POST['access_type'] ?? '', ['free', 'restricted', 'open_access', 'rental']) ? $_POST['access_type'] : 'free';
         $license = trim($_POST['license_info'] ?? 'Open Educational Resource');
         $status = ($_POST['status'] ?? 'active') === 'active' ? 'active' : 'inactive';
 
@@ -112,7 +112,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $language = trim($_POST['language'] ?? 'English');
         $pages = max(1, (int)($_POST['pages'] ?? 1));
         $description = trim($_POST['description'] ?? '');
-        $accessType = in_array($_POST['access_type'] ?? '', ['free', 'restricted', 'open_access']) ? $_POST['access_type'] : 'free';
+        $accessType = in_array($_POST['access_type'] ?? '', ['free', 'restricted', 'open_access', 'rental']) ? $_POST['access_type'] : 'free';
         $license = trim($_POST['license_info'] ?? 'Open Educational Resource');
         $status = ($_POST['status'] ?? 'active') === 'active' ? 'active' : 'inactive';
 
@@ -279,6 +279,7 @@ include __DIR__ . '/../includes/header.php';
             <option value="">Access Type</option>
             <option value="free" <?= $accessFilter === 'free' ? 'selected' : '' ?>>Free</option>
             <option value="open_access" <?= $accessFilter === 'open_access' ? 'selected' : '' ?>>Open Access</option>
+            <option value="rental" <?= $accessFilter === 'rental' ? 'selected' : '' ?>>Rental (₹5/day)</option>
             <option value="restricted" <?= $accessFilter === 'restricted' ? 'selected' : '' ?>>Restricted</option>
         </select>
         <select name="status" class="form-control" style="width:130px;">
@@ -332,7 +333,13 @@ include __DIR__ . '/../includes/header.php';
                                 <div class="text-muted" style="font-size:11px;"><?= (int)$b['file_size_kb'] ?> KB (PDF)</div>
                             </td>
                             <td>
-                                <span class="badge badge-green"><?= strtoupper(e($b['access_type'])) ?></span>
+                                <?php if ($b['access_type'] === 'rental'): ?>
+                                    <span class="badge" style="background: rgba(234, 88, 12, 0.15); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.3); font-weight:700;"><i class="fa-solid fa-indian-rupee-sign"></i> RENTAL (₹5/D)</span>
+                                <?php elseif ($b['access_type'] === 'restricted'): ?>
+                                    <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-lock"></i> RESTRICTED</span>
+                                <?php else: ?>
+                                    <span class="badge badge-green"><?= strtoupper(e($b['access_type'])) ?></span>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ($b['physical_title']): ?>
@@ -502,6 +509,7 @@ include __DIR__ . '/../includes/header.php';
                     <label style="font-weight: 600;">Access Policy</label>
                     <select name="access_type" id="mAccessType" class="form-control">
                         <option value="free">Free for Students</option>
+                        <option value="rental">Rental Only (₹5/day UPI)</option>
                         <option value="open_access">Open Access (Public)</option>
                         <option value="restricted">Restricted / Staff Only</option>
                     </select>

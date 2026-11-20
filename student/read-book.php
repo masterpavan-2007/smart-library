@@ -40,11 +40,30 @@ $studentId = null;
 $lastPage = 1;
 $isFavorite = false;
 $bookmarks = [];
+$activeRental = null;
 
 if ($_SESSION['role'] === 'student') {
     $st = $pdo->prepare("SELECT id FROM students WHERE user_id = ?");
     $st->execute([$_SESSION['user_id']]);
-    $studentId = $st->fetchColumn();
+    $studentId = (int)$st->fetchColumn();
+
+    // Check rental / access policy
+    if (in_array($book['access_type'], ['rental', 'restricted'], true)) {
+        $activeRental = checkStudentBookRental($pdo, $studentId, $bookId);
+        if (!$activeRental) {
+            $pendingRental = getStudentPendingRental($pdo, $studentId, $bookId);
+            if ($pendingRental) {
+                setFlash('error', 'Your rental payment of ₹' . number_format($pendingRental['total_amount'], 2) . ' (UTR: ' . e($pendingRental['transaction_reference']) . ') is pending admin verification. Access will be unlocked once approved.');
+                redirect('rentals.php');
+            } else {
+                setFlash('error', 'This digital book requires an active rental subscription (₹5/day). Please choose your rental duration to proceed.');
+                redirect('rent-book.php?id=' . $bookId);
+            }
+        }
+    } else {
+        // Even for open books, fetch if student rented it
+        $activeRental = checkStudentBookRental($pdo, $studentId, $bookId);
+    }
 
     if ($studentId) {
         // Fetch saved progress
@@ -349,7 +368,10 @@ body.reader-body {
 <body class="reader-body">
 
 <!-- Reader Header Toolbar -->
-<header class="reader-header">
+<header 
+
+
+class="reader-header">
     <div class="left-controls">
         <a href="<?= e($backUrl) ?>" class="reader-btn" title="Back to Library">
             <i class="fa-solid fa-arrow-left"></i>
@@ -357,7 +379,17 @@ body.reader-body {
         </a>
         <div class="book-meta">
             <div class="book-title" title="<?= e($book['title']) ?>"><?= e($book['title']) ?></div>
-            <div class="book-sub"><?= e($author) ?> &middot; <?= e($book['category_name'] ?: 'General') ?></div>
+            <div class="book-sub">
+                <?= e($author) ?> &middot; <?= e($book['category_name'] ?: 'General') ?>
+                <?php if ($activeRental): 
+                    $expTime = strtotime($activeRental['expiry_date']);
+                    $daysLeft = max(0, ceil(($expTime - time()) / 86400));
+                ?>
+                    <span class="badge" style="background:#16a34a; color:#fff; font-size:10.5px; padding:2px 7px; border-radius:4px; margin-left:6px;" title="Rental expires on <?= date('d M Y, h:i A', $expTime) ?>">
+                        <i class="fa-solid fa-clock"></i> Active Rental: <?= $daysLeft ?> <?= $daysLeft === 1 ? 'day' : 'days' ?> left
+                    </span>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 

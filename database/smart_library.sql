@@ -337,6 +337,41 @@ CREATE TABLE library_attendance (
     INDEX idx_att_date (entry_time)
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- DIGITAL BOOK RENTALS & REAL UPI PAYMENTS
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS book_rentals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rental_code VARCHAR(30) NOT NULL UNIQUE,
+    student_id INT NOT NULL,
+    digital_book_id INT NOT NULL,
+    rental_days INT NOT NULL DEFAULT 1,
+    price_per_day DECIMAL(8,2) NOT NULL DEFAULT 5.00,
+    total_amount DECIMAL(8,2) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'UPI_QR',
+    upi_id VARCHAR(100) NOT NULL DEFAULT '8766087273@ptyes',
+    transaction_reference VARCHAR(100) DEFAULT NULL,
+    payment_status ENUM('PENDING','PAID','FAILED','REJECTED','REFUNDED') NOT NULL DEFAULT 'PENDING',
+    rental_status ENUM('pending','active','expired','cancelled') NOT NULL DEFAULT 'pending',
+    start_date DATETIME DEFAULT NULL,
+    expiry_date DATETIME DEFAULT NULL,
+    verified_by INT DEFAULT NULL,
+    verified_at DATETIME DEFAULT NULL,
+    rejection_reason VARCHAR(255) DEFAULT NULL,
+    admin_notes TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (digital_book_id) REFERENCES digital_books(id) ON DELETE CASCADE,
+    FOREIGN KEY (verified_by) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_br_student (student_id),
+    INDEX idx_br_book (digital_book_id),
+    INDEX idx_br_pay_status (payment_status),
+    INDEX idx_br_rent_status (rental_status),
+    INDEX idx_br_expiry (expiry_date),
+    INDEX idx_br_utr (transaction_reference)
+) ENGINE=InnoDB;
+
 -- =====================================================================
 -- SAMPLE DATA
 -- =====================================================================

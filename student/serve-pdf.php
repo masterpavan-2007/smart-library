@@ -31,11 +31,20 @@ if ($book['status'] !== 'active' && $_SESSION['role'] === 'student') {
     die('This digital resource is currently inactive or undergoing maintenance.');
 }
 
-// Verify student permissions for restricted books
-if ($book['access_type'] === 'restricted' && $_SESSION['role'] === 'student') {
-    // Restricted access requires approval or specific permissions
-    http_response_code(403);
-    die('You do not have permission to access this restricted digital resource. Please contact the librarian.');
+// Verify student permissions and rental requirements
+if ($_SESSION['role'] === 'student') {
+    $st = $pdo->prepare("SELECT id FROM students WHERE user_id = ?");
+    $st->execute([$_SESSION['user_id']]);
+    $studentId = (int)$st->fetchColumn();
+
+    if (in_array($book['access_type'], ['rental', 'restricted'], true)) {
+        $rental = checkStudentBookRental($pdo, $studentId, $bookId);
+        if (!$rental) {
+            http_response_code(403);
+            header('Content-Type: text/plain; charset=UTF-8');
+            die('Access Denied: This digital book requires an active paid rental subscription (₹5/day). Please visit the Virtual Library to rent this book or verify your payment status.');
+        }
+    }
 }
 
 // Secure file path resolution

@@ -82,6 +82,19 @@ $popDigital = $pdo->query("
     ORDER BY db.read_count DESC, db.view_count DESC LIMIT 3
 ")->fetchAll();
 
+// Active Digital Rentals
+$stmtRentals = $pdo->prepare("
+    SELECT br.*, db.title, db.pages, c.name AS category_name, COALESCE(a.name, db.author_name) AS author_name
+    FROM book_rentals br
+    JOIN digital_books db ON db.id = br.digital_book_id
+    LEFT JOIN categories c ON c.id = db.category_id
+    LEFT JOIN authors a ON a.id = db.author_id
+    WHERE br.student_id = ? AND br.payment_status = 'PAID' AND br.rental_status = 'active' AND br.expiry_date >= NOW()
+    ORDER BY br.expiry_date ASC LIMIT 3
+");
+$stmtRentals->execute([$studentId]);
+$myActiveRentals = $stmtRentals->fetchAll();
+
 // Reading statistics: favourite category across physical & digital
 $stmt = $pdo->prepare("
     SELECT c.name, COUNT(*) c FROM book_issues bi
@@ -326,6 +339,45 @@ include __DIR__ . '/../includes/header.php';
                 <a href="read-book.php?id=<?= $cr['digital_book_id'] ?>" class="btn btn-sm btn-primary">
                     <i class="fa-solid fa-book-open"></i> Resume
                 </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- Active Digital Book Rentals Widget -->
+<?php if (!empty($myActiveRentals)): ?>
+<div class="card" style="margin-top:18px; border-left: 4px solid #10b981;">
+    <div class="flex justify-between items-center" style="margin-bottom:12px;">
+        <h3 style="margin:0; font-size:16px; color:var(--text);"><i class="fa-solid fa-receipt text-success"></i> My Active Book Rentals</h3>
+        <a href="rentals.php" style="font-size:13px; font-weight:600;">View All Rented Books &rarr;</a>
+    </div>
+    <div class="grid grid-3" style="gap:14px;">
+        <?php foreach ($myActiveRentals as $ar): 
+            $expTimestamp = strtotime($ar['expiry_date']);
+            $daysLeft = max(0, ceil(($expTimestamp - time()) / 86400));
+        ?>
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                    <div class="flex justify-between items-center" style="margin-bottom:6px;">
+                        <span class="badge badge-green" style="font-size:10px;"><i class="fa-solid fa-clock"></i> <?= $daysLeft ?> <?= $daysLeft === 1 ? 'day' : 'days' ?> left</span>
+                        <span style="font-size:11.5px; color:#ea580c; font-weight:700;">₹<?= number_format($ar['total_amount'], 2) ?></span>
+                    </div>
+                    <strong style="font-size:13.5px; color:var(--text); display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;">
+                        <?= e($ar['title']) ?>
+                    </strong>
+                    <div class="text-muted" style="font-size:11.5px; margin-bottom:10px;">
+                        <?= e($ar['author_name']) ?> &middot; Exp: <?= date('d M Y', $expTimestamp) ?>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <a href="read-book.php?id=<?= $ar['digital_book_id'] ?>" class="btn btn-sm btn-primary" style="flex:1; justify-content:center;">
+                        <i class="fa-solid fa-book-open"></i> Read
+                    </a>
+                    <a href="rent-book.php?id=<?= $ar['digital_book_id'] ?>&renew=1" class="btn btn-sm btn-outline" title="Renew">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </a>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>

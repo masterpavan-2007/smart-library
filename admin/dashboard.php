@@ -35,6 +35,9 @@ $totalDigitalBooks    = (int)$pdo->query("SELECT COUNT(*) FROM digital_books")->
 $availableDigital     = (int)$pdo->query("SELECT COUNT(*) FROM digital_books WHERE status='active'")->fetchColumn();
 $totalReadingSessions = (int)$pdo->query("SELECT COUNT(*) FROM reading_history")->fetchColumn();
 $activeReaders        = (int)$pdo->query("SELECT COUNT(DISTINCT student_id) FROM reading_history")->fetchColumn();
+$totalRentalRevenue   = (float)$pdo->query("SELECT COALESCE(SUM(total_amount), 0) FROM book_rentals WHERE payment_status = 'PAID'")->fetchColumn();
+$pendingRentalsCount  = (int)$pdo->query("SELECT COUNT(*) FROM book_rentals WHERE payment_status = 'PENDING'")->fetchColumn();
+$activeRentalsCount   = (int)$pdo->query("SELECT COUNT(*) FROM book_rentals WHERE payment_status = 'PAID' AND rental_status = 'active' AND expiry_date >= NOW()")->fetchColumn();
 
 // Due soon count (due in next 3 days)
 $dueSoonCount = (int)$pdo->query("SELECT COUNT(*) FROM book_issues WHERE status IN ('issued','overdue') AND due_date <= DATE_ADD(CURDATE(), INTERVAL 3 DAY) AND due_date >= CURDATE()")->fetchColumn();
@@ -311,6 +314,39 @@ include __DIR__ . '/../includes/header.php';
         <div class="card stat-card">
             <div class="icon blue"><i class="fa-solid fa-users"></i></div>
             <div><div class="num"><?= $activeReaders ?></div><div class="label">Active Online Readers</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Digital Book Rentals & Real UPI Revenue -->
+<div style="margin-top:18px; margin-bottom:8px;">
+    <div class="flex justify-between items-center" style="margin-bottom:10px;">
+        <h3 style="font-size:16px; margin:0; color:var(--text); display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-receipt text-primary"></i> Digital Book Rentals (₹5/day UPI QR)
+        </h3>
+        <a href="rentals.php" style="font-size:13px; font-weight:600;">Manage Rentals &rarr;</a>
+    </div>
+    <div class="grid grid-3">
+        <div class="card stat-card">
+            <div class="icon green"><i class="fa-solid fa-sack-dollar"></i></div>
+            <div>
+                <div class="num">&#8377;<?= number_format($totalRentalRevenue, 2) ?></div>
+                <div class="label">Rental Revenue Collected</div>
+            </div>
+        </div>
+        <div class="card stat-card">
+            <div class="icon yellow"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div>
+                <div class="num" style="color:<?= $pendingRentalsCount > 0 ? '#d97706' : 'var(--text)' ?>;"><?= $pendingRentalsCount ?></div>
+                <div class="label">Pending Payments Needing Verification</div>
+            </div>
+        </div>
+        <div class="card stat-card">
+            <div class="icon blue"><i class="fa-solid fa-book-bookmark"></i></div>
+            <div>
+                <div class="num"><?= $activeRentalsCount ?></div>
+                <div class="label">Active Reader Access Subscriptions</div>
+            </div>
         </div>
     </div>
 </div>

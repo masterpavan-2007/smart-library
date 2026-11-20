@@ -380,6 +380,44 @@ function sendPaymentReceiptNotification($pdo, $paymentRecordId) {
     ];
 }
 
+/**
+ * Check if a student has an active, verified rental for a digital book.
+ * Automatically updates any expired rentals in real-time.
+ */
+function checkStudentBookRental($pdo, $studentId, $digitalBookId) {
+    if (!$studentId || !$digitalBookId) return false;
+    
+    // Auto-expire past rentals
+    try {
+        $pdo->query("UPDATE book_rentals SET rental_status = 'expired' WHERE rental_status = 'active' AND expiry_date < NOW()");
+    } catch (Exception $e) {}
+
+    $stmt = $pdo->prepare("
+        SELECT * FROM book_rentals 
+        WHERE student_id = ? AND digital_book_id = ? 
+          AND payment_status = 'PAID' AND rental_status = 'active' 
+          AND expiry_date >= NOW()
+        ORDER BY expiry_date DESC LIMIT 1
+    ");
+    $stmt->execute([$studentId, $digitalBookId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?: false;
+}
+
+/**
+ * Check if a student has a pending rental verification for a digital book.
+ */
+function getStudentPendingRental($pdo, $studentId, $digitalBookId) {
+    if (!$studentId || !$digitalBookId) return false;
+    $stmt = $pdo->prepare("
+        SELECT * FROM book_rentals 
+        WHERE student_id = ? AND digital_book_id = ? 
+          AND payment_status = 'PENDING'
+        ORDER BY id DESC LIMIT 1
+    ");
+    $stmt->execute([$studentId, $digitalBookId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?: false;
+}
+
 /** Base path helper for links (adjust if you deploy under a different folder name). */
 function basePath() {
     return '/smart-library';

@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             reservation_valid_days = ?,
             upi_id = ?,
             upi_merchant_name = ?,
+            rental_price_per_day = ?,
             library_address = ?,
             library_phone = ?,
             sms_provider = ?,
@@ -34,8 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         max(0, (int)($_POST['grace_period_days'] ?? 0)),
         max(1, (int)($_POST['max_books_per_student'] ?? 3)),
         max(1, (int)($_POST['reservation_valid_days'] ?? 3)),
-        trim($_POST['upi_id'] ?? 'smartlibrary@upi'),
+        trim($_POST['upi_id'] ?? '8766087273@ptyes'),
         trim($_POST['upi_merchant_name'] ?? 'Smart Library'),
+        max(1.0, (float)($_POST['rental_price_per_day'] ?? 5.00)),
         trim($_POST['library_address'] ?? 'Knowledge Hub, Central Campus, Pune - 411001'),
         trim($_POST['library_phone'] ?? '+91 98765 43210'),
         trim($_POST['sms_provider'] ?? 'demo'),
@@ -109,12 +111,25 @@ include __DIR__ . '/../includes/header.php';
         <div class="form-row">
             <div class="form-group">
                 <label class="form-label">Institution UPI ID (VPA)</label>
-                <input class="form-control" name="upi_id" placeholder="e.g. library@okhdfcbank" value="<?= e($settings['upi_id'] ?? 'smartlibrary@upi') ?>" required>
+                <input class="form-control" name="upi_id" placeholder="8766087273@ptyes" value="<?= e($settings['upi_id'] ?? '8766087273@ptyes') ?>" required>
                 <div class="text-muted" style="font-size:11.5px; margin-top:2px;">Scanned by student UPI apps (Google Pay, PhonePe, Paytm, BHIM)</div>
             </div>
             <div class="form-group">
                 <label class="form-label">Payee / Merchant Display Name</label>
                 <input class="form-control" name="upi_merchant_name" placeholder="e.g. Smart Library Central" value="<?= e($settings['upi_merchant_name'] ?? 'Smart Library') ?>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Digital Book Rental Rate (&#8377; / Day)</label>
+                <input class="form-control" type="number" step="0.50" min="1.00" name="rental_price_per_day" value="<?= e($settings['rental_price_per_day'] ?? 5.00) ?>" required>
+                <div class="text-muted" style="font-size:11.5px; margin-top:2px;">Daily rental subscription fee for digital PDF books (default: &#8377;5.00/day)</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Payment QR Image Location</label>
+                <input class="form-control" readonly value="<?= e($settings['payment_qr_path'] ?? 'assets/images/payment-qr.png') ?>" style="background:rgba(0,0,0,0.03);">
+                <div class="text-muted" style="font-size:11.5px; margin-top:2px;"><a href="rentals.php">Manage / upload QR in Digital Book Rentals &rarr;</a></div>
             </div>
         </div>
 
